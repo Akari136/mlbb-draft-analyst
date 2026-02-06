@@ -241,6 +241,16 @@ if page == "🎯 Draft Analysis":
         pick_w = st.number_input("Pick weight", value=0.02, step=0.01)
         ban_w = st.number_input("Ban weight", value=0.05, step=0.01)
         tier_w = st.number_input("Tier weight", value=0.75, step=0.05)
+        
+        st.subheader("Personal Performance Weights")
+        personal_wr_w = st.number_input("Personal WR weight", value=0.08, step=0.01,
+                                        help="Weight for your personal win rate deviation from 50%")
+        matchup_win_w = st.number_input("Good matchup bonus", value=1.5, step=0.1,
+                                       help="Bonus when you have 60%+ WR vs enemy")
+        matchup_loss_w = st.number_input("Bad matchup penalty", value=-1.8, step=0.1,
+                                        help="Penalty when you have <40% WR vs enemy")
+        min_games = st.number_input("Min games for confidence", value=5, step=1,
+                                   help="Minimum games for high confidence rating")
 
     weights = {
         "strong_hit": float(strong_hit),
@@ -249,6 +259,10 @@ if page == "🎯 Draft Analysis":
         "pick": float(pick_w),
         "ban": float(ban_w),
         "tier": float(tier_w),
+        "personal_wr": float(personal_wr_w),
+        "matchup_win": float(matchup_win_w),
+        "matchup_loss": float(matchup_loss_w),
+        "min_games_confidence": int(min_games),
     }
 
     # Main UI
@@ -267,6 +281,10 @@ if page == "🎯 Draft Analysis":
 
     st.divider()
 
+    # Toggle for personal performance
+    use_personal = st.checkbox("Use personal performance data", value=True, 
+                               help="Adjust recommendations based on your game history")
+    
     # Run Analysis
     if st.button("🚀 Run Draft Analysis", type="primary", use_container_width=True):
         if not pool:
@@ -286,27 +304,45 @@ if page == "🎯 Draft Analysis":
                 base_score=float(base_score),
                 top_n=int(top_n),
                 use_inverse=use_inverse,
+                use_personal=use_personal,
             )
 
             st.subheader("Analysis Results")
             for i, r in enumerate(results, start=1):
-                # Get personal stats for this hero
-                hero_stats = get_hero_stats(db_path, r.hero)
-                
                 with st.container(border=True):
                     c1, c2, c3 = st.columns([3, 1, 1])
                     with c1:
                         st.markdown(f"### #{i} {r.hero}")
+                        
+                        # Show matchup warnings prominently
+                        if r.matchup_warnings:
+                            for warning in r.matchup_warnings:
+                                st.warning(warning)
+                        
                         st.markdown(f"**Reasoning:** {r.explain}")
                         st.info(f"💡 **Pro-Tip:** {r.early_tip}")
                     with c2:
                         st.metric("Engine Score", f"{r.score:.2f}")
                     with c3:
-                        if hero_stats['total_games'] > 0:
+                        if r.personal_stats and r.personal_stats.total_games > 0:
+                            # Show confidence indicator
+                            conf_emoji = {
+                                "high": "⭐⭐⭐",
+                                "medium": "⭐⭐",
+                                "low": "⭐",
+                                "none": ""
+                            }
+                            delta_color = "normal"
+                            if r.personal_stats.win_rate >= 55:
+                                delta_color = "normal"
+                            elif r.personal_stats.win_rate <= 45:
+                                delta_color = "inverse"
+                            
                             st.metric(
                                 "Your Win Rate", 
-                                f"{hero_stats['win_rate']:.1f}%",
-                                f"{hero_stats['total_games']} games"
+                                f"{r.personal_stats.win_rate:.1f}%",
+                                f"{r.personal_stats.total_games}g {conf_emoji[r.personal_stats.confidence]}",
+                                delta_color=delta_color
                             )
                         else:
                             st.caption("No personal history")
@@ -316,15 +352,29 @@ if page == "🎯 Draft Analysis":
                         with col_a:
                             st.write(f"**Counter bonus:** {r.counter_bonus:+.2f}")
                             st.write(f"**Meta bonus:** {r.meta_bonus:+.2f}")
+                            st.write(f"**Personal bonus:** {r.personal_bonus:+.2f}")
                             st.write(f"**Strong hits:** {', '.join(r.strong_hits) if r.strong_hits else 'None'}")
                             st.write(f"**Weak hits:** {', '.join(r.weak_hits) if r.weak_hits else 'None'}")
                         with col_b:
-                            if hero_stats['total_games'] > 0:
-                                st.write(f"**Personal Record:** {hero_stats['wins']}W - {hero_stats['losses']}L")
-                                st.write(f"**Avg KDA:** {hero_stats['avg_kills']:.1f}/{hero_stats['avg_deaths']:.1f}/{hero_stats['avg_assists']:.1f}")
+                            if r.personal_stats and r.personal_stats.total_games > 0:
+                                st.write(f"**Personal Record:** {r.personal_stats.wins}W - {r.personal_stats.losses}L")
+                                st.write(f"**Confidence:** {r.personal_stats.confidence.title()}")
+                                
+                                # Show matchup details
+                                if enemies:
+                                    st.write("**Matchup History:**")
+                                    for enemy in enemies:
+                                        matchup = engine._get_matchup_stats(r.hero, enemy)
+                                        if matchup and matchup.total > 0:
+                                            emoji = "✅" if matchup.win_rate >= 50 else "❌"
+                                            st.caption(f"{emoji} vs {enemy}: {matchup.wins}-{matchup.losses}")
+                            else:
+                                st.caption("Play some games to build matchup history!")
 
         except Exception as e:
             st.error(f"Engine Error: {e}")
+            import traceback
+            st.code(traceback.format_exc())
         finally:
             engine.close()
 

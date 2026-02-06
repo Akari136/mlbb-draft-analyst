@@ -3,14 +3,13 @@
 draft_engine.py — Draft recommendation engine using:
 - Counter DB (strong_against / weak_against)
 - Meta weighting (win/pick/ban + tier) from meta.json
+- Personal performance history from game_history table
 
-Includes:
-- Robust name normalization
-- DB-as-source-of-truth alias resolution
-- Dynamic explanations
-- Inverse counter inference (FAST, cached):
-    If enemy is weak against hero => hero is strong vs enemy
-    If enemy is strong against hero => hero is weak vs enemy
+NEW in v1.1:
+- Personal win rate weighting
+- Matchup-specific learning (hero vs enemy performance)
+- Confidence scoring based on games played
+- Performance warnings for bad matchups
 """
 
 from __future__ import annotations
@@ -58,7 +57,7 @@ def parse_percent(x: Optional[str]) -> Optional[float]:
 # Explainability structures
 # -----------------------------
 
-ReasonType = Literal["counter_strong", "counter_weak", "meta", "tier"]
+ReasonType = Literal["counter_strong", "counter_weak", "meta", "tier", "personal_wr", "matchup_history"]
 
 @dataclass
 class Reason:
@@ -66,7 +65,7 @@ class Reason:
     delta: float
     detail: str
 
-def render_explanation(reasons: List[Reason], max_reasons: int = 3) -> str:
+def render_explanation(reasons: List[Reason], max_reasons: int = 4) -> str:
     if not reasons:
         return "No strong signals detected (neutral pick)."
     reasons_sorted = sorted(reasons, key=lambda r: abs(r.delta), reverse=True)[:max_reasons]
@@ -82,6 +81,23 @@ def render_explanation(reasons: List[Reason], max_reasons: int = 3) -> str:
 # -----------------------------
 
 @dataclass
+class PersonalStats:
+    """Personal performance statistics for a hero"""
+    total_games: int
+    wins: int
+    losses: int
+    win_rate: float
+    confidence: str  # "high", "medium", "low", "none"
+    
+@dataclass
+class MatchupStats:
+    """Performance of hero vs specific enemy"""
+    wins: int
+    losses: int
+    total: int
+    win_rate: float
+
+@dataclass
 class PickResult:
     hero: str
     score: float
@@ -89,9 +105,12 @@ class PickResult:
     weak_hits: List[str]
     meta_bonus: float
     counter_bonus: float
+    personal_bonus: float
     reasons: List[Reason]
     explain: str
     early_tip: str
+    personal_stats: Optional[PersonalStats]
+    matchup_warnings: List[str]  # List of enemy heroes you struggle against
 
 
 # -----------------------------
@@ -115,7 +134,7 @@ class DraftEngine:
 
         self.aliases = self._build_aliases()
 
-        # Default weights (safe-ish)
+        # Default weights
         self.w = {
             "strong_hit": 1.25,
             "weak_hit": -1.25,
@@ -123,6 +142,11 @@ class DraftEngine:
             "pick": 0.02,
             "ban": 0.05,
             "tier": 0.75,
+            # NEW: Personal performance weights
+            "personal_wr": 0.08,  # Weight for personal win rate deviation from 50%
+            "matchup_win": 1.5,   # Bonus for winning matchup history
+            "matchup_loss": -1.8, # Penalty for losing matchup history
+            "min_games_confidence": 5,  # Minimum games for high confidence
         }
         if weights:
             self.w.update(weights)
@@ -218,6 +242,77 @@ class DraftEngine:
         self.cur.execute(q, [hero, relation, *enemies])
         return [r[0] for r in self.cur.fetchall()]
 
+    # ---------- personal performance queries ----------
+
+    def _get_personal_stats(self, hero: str) -> PersonalStats:
+        """Get overall personal stats for a hero"""
+        try:
+            self.cur.execute("""
+                SELECT 
+                    COUNT(*) as total_games,
+                    SUM(CASE WHEN result = 'Win' THEN 1 ELSE 0 END) as wins
+                FROM game_history
+                WHERE your_hero = ?
+            """, (hero,))
+            
+            row = self.cur.fetchone()
+            if row and row[0] > 0:
+                total, wins = row[0], row[1] or 0
+                losses = total - wins
+                win_rate = (wins / total * 100) if total > 0 else 0
+                
+                # Confidence levels
+                if total >= self.w["min_games_confidence"]:
+                    confidence = "high"
+                elif total >= 3:
+                    confidence = "medium"
+                elif total >= 1:
+                    confidence = "low"
+                else:
+                    confidence = "none"
+                
+                return PersonalStats(
+                    total_games=total,
+                    wins=wins,
+                    losses=losses,
+                    win_rate=win_rate,
+                    confidence=confidence
+                )
+        except sqlite3.OperationalError:
+            # Table doesn't exist yet
+            pass
+        
+        return PersonalStats(0, 0, 0, 0.0, "none")
+
+    def _get_matchup_stats(self, hero: str, enemy: str) -> Optional[MatchupStats]:
+        """Get specific matchup history (hero vs enemy)"""
+        try:
+            self.cur.execute("""
+                SELECT 
+                    COUNT(*) as total,
+                    SUM(CASE WHEN result = 'Win' THEN 1 ELSE 0 END) as wins
+                FROM game_history
+                WHERE your_hero = ?
+                  AND enemies LIKE ?
+            """, (hero, f'%"{enemy}"%'))
+            
+            row = self.cur.fetchone()
+            if row and row[0] > 0:
+                total, wins = row[0], row[1] or 0
+                losses = total - wins
+                win_rate = (wins / total * 100) if total > 0 else 0
+                
+                return MatchupStats(
+                    wins=wins,
+                    losses=losses,
+                    total=total,
+                    win_rate=win_rate
+                )
+        except sqlite3.OperationalError:
+            pass
+        
+        return None
+
     # ---------- meta scoring ----------
 
     def _meta_bonus_and_reasons(self, hero: str) -> Tuple[float, List[Reason]]:
@@ -252,6 +347,70 @@ class DraftEngine:
 
         return total, reasons
 
+    # ---------- personal performance scoring ----------
+
+    def _personal_bonus_and_reasons(
+        self, 
+        hero: str, 
+        enemies: List[str],
+        personal_stats: PersonalStats
+    ) -> Tuple[float, List[Reason], List[str]]:
+        """Calculate bonus/penalty based on personal performance"""
+        reasons: List[Reason] = []
+        warnings: List[str] = []
+        total_bonus = 0.0
+        
+        # 1. Overall win rate adjustment
+        if personal_stats.total_games >= 3:  # Need at least 3 games
+            wr_deviation = personal_stats.win_rate - 50.0
+            wr_bonus = wr_deviation * self.w["personal_wr"]
+            total_bonus += wr_bonus
+            
+            if abs(wr_bonus) > 0.1:
+                confidence_emoji = {
+                    "high": "⭐⭐⭐",
+                    "medium": "⭐⭐",
+                    "low": "⭐",
+                    "none": ""
+                }
+                reasons.append(
+                    Reason(
+                        "personal_wr",
+                        wr_bonus,
+                        f"Your WR: {personal_stats.win_rate:.1f}% ({personal_stats.total_games}g) {confidence_emoji[personal_stats.confidence]}"
+                    )
+                )
+        
+        # 2. Matchup-specific history
+        for enemy in enemies:
+            matchup = self._get_matchup_stats(hero, enemy)
+            if matchup and matchup.total >= 2:  # Need at least 2 games vs this enemy
+                if matchup.win_rate >= 60.0:
+                    # Good matchup history
+                    bonus = self.w["matchup_win"]
+                    total_bonus += bonus
+                    reasons.append(
+                        Reason(
+                            "matchup_history",
+                            bonus,
+                            f"Strong vs {enemy}: {matchup.wins}-{matchup.losses} in your games"
+                        )
+                    )
+                elif matchup.win_rate <= 40.0:
+                    # Bad matchup history
+                    penalty = self.w["matchup_loss"]
+                    total_bonus += penalty
+                    reasons.append(
+                        Reason(
+                            "matchup_history",
+                            penalty,
+                            f"Weak vs {enemy}: {matchup.wins}-{matchup.losses} in your games"
+                        )
+                    )
+                    warnings.append(f"⚠️ You're {matchup.wins}-{matchup.losses} vs {enemy}")
+        
+        return total_bonus, reasons, warnings
+
     # ---------- recommend ----------
 
     def recommend(
@@ -260,8 +419,9 @@ class DraftEngine:
         enemies: List[str],
         base_score: float = 5.0,
         top_n: int = 10,
-        max_reasons: int = 3,
+        max_reasons: int = 4,
         use_inverse: bool = True,
+        use_personal: bool = True,  # NEW: Toggle personal performance
     ) -> List[PickResult]:
         # Resolve inputs -> DB names
         db_enemies: List[str] = []
@@ -299,11 +459,11 @@ class DraftEngine:
         for hero in db_pool:
             reasons: List[Reason] = []
 
-            # direct hits (hero -> enemy)
+            # 1. Counter analysis (direct hits)
             strong_direct = self._get_relation_hits(hero, db_enemies, "strong_against")
             weak_direct = self._get_relation_hits(hero, db_enemies, "weak_against")
 
-            # inverse hits (enemy -> hero)
+            # 2. Inverse hits (enemy -> hero)
             strong_inv: List[str] = []
             weak_inv: List[str] = []
             if use_inverse and db_enemies:
@@ -321,7 +481,7 @@ class DraftEngine:
                 + len(weak_hits) * self.w["weak_hit"]
             )
 
-            # Reason messages show whether it came from direct/inverse
+            # Add counter reasons
             if strong_hits:
                 src_note = []
                 if strong_direct:
@@ -332,7 +492,7 @@ class DraftEngine:
                     Reason(
                         "counter_strong",
                         len(strong_hits) * self.w["strong_hit"],
-                        f"Strong vs {', '.join(strong_hits)} ({'/'.join(src_note)})" if src_note else f"Strong vs {', '.join(strong_hits)}",
+                        f"Strong vs {', '.join(strong_hits[:2])}{'...' if len(strong_hits) > 2 else ''}"
                     )
                 )
 
@@ -346,17 +506,32 @@ class DraftEngine:
                     Reason(
                         "counter_weak",
                         len(weak_hits) * self.w["weak_hit"],
-                        f"Weak vs {', '.join(weak_hits)} ({'/'.join(src_note)})" if src_note else f"Weak vs {', '.join(weak_hits)}",
+                        f"Weak vs {', '.join(weak_hits[:2])}{'...' if len(weak_hits) > 2 else ''}"
                     )
                 )
 
+            # 3. Meta bonus
             meta_bonus, meta_reasons = self._meta_bonus_and_reasons(hero)
             reasons.extend(meta_reasons)
 
+            # 4. Personal performance bonus (NEW)
+            personal_bonus = 0.0
+            warnings: List[str] = []
+            personal_stats = None
+            
+            if use_personal:
+                personal_stats = self._get_personal_stats(hero)
+                personal_bonus, personal_reasons, warnings = self._personal_bonus_and_reasons(
+                    hero, db_enemies, personal_stats
+                )
+                reasons.extend(personal_reasons)
+
+            # 5. Get tips
             m_data = self.resolve_meta_entry(hero) or {}
             tip = m_data.get("early_tips") or m_data.get("early_tip") or "Tactical analysis pending."
 
-            score = base_score + counter_bonus + meta_bonus
+            # 6. Calculate final score
+            score = base_score + counter_bonus + meta_bonus + personal_bonus
             explain = render_explanation(reasons, max_reasons=max_reasons)
 
             results.append(
@@ -367,9 +542,12 @@ class DraftEngine:
                     weak_hits=weak_hits,
                     meta_bonus=round(meta_bonus, 3),
                     counter_bonus=round(counter_bonus, 3),
+                    personal_bonus=round(personal_bonus, 3),
                     reasons=reasons,
                     explain=explain,
                     early_tip=tip,
+                    personal_stats=personal_stats,
+                    matchup_warnings=warnings,
                 )
             )
 
@@ -386,15 +564,20 @@ if __name__ == "__main__":
     enemies = ["Yuzhong"]
     pool = ["Thamuz", "Terizla", "Argus", "Martis", "Lapu-Lapu"]
 
-    res = engine.recommend(pool=pool, enemies=enemies, top_n=10, use_inverse=True)
+    res = engine.recommend(pool=pool, enemies=enemies, top_n=10, use_inverse=True, use_personal=True)
 
     print("ENEMIES:", enemies)
     print("POOL:", pool)
     print("\nRESULTS:")
     for r in res:
-        print(f"{r.hero:<12} score={r.score:<6} counter={r.counter_bonus:<6} meta={r.meta_bonus:<6}")
+        print(f"{r.hero:<12} score={r.score:<6} counter={r.counter_bonus:<6} meta={r.meta_bonus:<6} personal={r.personal_bonus:<6}")
         print(f"  strong_hits: {r.strong_hits}")
         print(f"  weak_hits:   {r.weak_hits}")
+        if r.personal_stats and r.personal_stats.total_games > 0:
+            print(f"  your stats:  {r.personal_stats.wins}-{r.personal_stats.losses} ({r.personal_stats.win_rate:.1f}% WR, {r.personal_stats.confidence} confidence)")
+        if r.matchup_warnings:
+            for w in r.matchup_warnings:
+                print(f"  {w}")
         print(f"  why: {r.explain}")
         print(f"  tip: {r.early_tip}\n")
 
