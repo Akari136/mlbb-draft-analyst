@@ -1,0 +1,2062 @@
+{
+    "Aamon": {
+        "role": "Assassin",
+        "specialty": "Chase/Magic Damage",
+        "lane": "Jungle",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Saber",
+            "Paquito",
+            "X.Borg",
+            "Gusion",
+            "Hayabusa"
+        ],
+        "win_rate": "52.93%",
+        "pick_rate": "0.94%",
+        "ban_rate": "41.67%"
+    },
+    "Akai": {
+        "role": "Tank",
+        "specialty": "Guard/Crowd Control",
+        "lane": "Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Diggie",
+            "Odette",
+            "Valir",
+            "Valentina",
+            "Karrie"
+        ],
+        "win_rate": "50.08%",
+        "pick_rate": "0.61%",
+        "ban_rate": "1.23%"
+    },
+    "Aldous": {
+        "role": "Fighter",
+        "specialty": "Burst/Support",
+        "lane": "EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Akai",
+            "Melissa",
+            "Chou",
+            "Kadita",
+            "Kaja"
+        ],
+        "win_rate": "49.85%",
+        "pick_rate": "0.24%",
+        "ban_rate": "0.15%"
+    },
+    "Alice": {
+        "role": "Tank/Mage",
+        "specialty": "Charge/Regen",
+        "lane": "EXP Lane/Jungle",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Chou",
+            "Hanabi",
+            "Aldous",
+            "Harley",
+            "Kaja"
+        ],
+        "win_rate": "49.84%",
+        "pick_rate": "1.22%",
+        "ban_rate": "31.78%"
+    },
+    "Alpha": {
+        "role": "Fighter",
+        "specialty": "Charge/Damage",
+        "lane": "Jungle/EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Freya",
+            "Thamuz",
+            "Valir",
+            "Baxia",
+            "Minsitthar"
+        ],
+        "win_rate": "45.97%",
+        "pick_rate": "0.54%",
+        "ban_rate": "0.09%"
+    },
+    "Alucard": {
+        "role": "Fighter/Assassin",
+        "specialty": "Chase/Damage",
+        "lane": "Jungle",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Eudora",
+            "Saber",
+            "Fanny",
+            "Zhask",
+            "Freya"
+        ],
+        "win_rate": "51.17%",
+        "pick_rate": "0.65%",
+        "ban_rate": "0.82%"
+    },
+    "Angela": {
+        "role": "Support",
+        "specialty": "Guard/Support",
+        "lane": "Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Lancelot",
+            "Lesley",
+            "Harley",
+            "Kagura",
+            "Natalia"
+        ],
+        "win_rate": "50.35%",
+        "pick_rate": "1.98%",
+        "ban_rate": "22.31%"
+    },
+    "Argus": {
+        "role": "Fighter",
+        "specialty": "Charge/Burst",
+        "lane": "EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Saber",
+            "Eudora",
+            "Akai",
+            "Natalia",
+            "Kaja"
+        ],
+        "win_rate": "50.37%",
+        "pick_rate": "0.18%",
+        "ban_rate": "0.16%"
+    },
+    "Arlott": {
+        "role": "Fighter/Assassin",
+        "specialty": "Charge/Burst",
+        "lane": "EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Martis",
+            "Chou",
+            "Minsitthar",
+            "Kaja",
+            "Thamuz"
+        ],
+        "win_rate": "49.51%",
+        "pick_rate": "0.81%",
+        "ban_rate": "2.11%"
+    },
+    "Atlas": {
+        "role": "Tank",
+        "specialty": "Crowd Control/Initiator",
+        "lane": "Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Valir",
+            "Karrie",
+            "Diggie",
+            "Kaja",
+            "Akai"
+        ],
+        "win_rate": "49.86%",
+        "pick_rate": "0.45%",
+        "ban_rate": "0.55%"
+    },
+    "Aulus": {
+        "role": "Fighter",
+        "specialty": "Damage/Crowd Control",
+        "lane": "Jungle",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Phoveus",
+            "Masha",
+            "Jawhead",
+            "Valir",
+            "Wanwan"
+        ],
+        "win_rate": "50.74%",
+        "pick_rate": "0.07%",
+        "ban_rate": "0.04%"
+    },
+    "Aurora": {
+        "role": "Mage",
+        "specialty": "Crowd Control/Poke",
+        "lane": "Mid Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Guinevere",
+            "Natalia",
+            "Hayabusa",
+            "Chou",
+            "Kagura"
+        ],
+        "win_rate": "47.29%",
+        "pick_rate": "0.23%",
+        "ban_rate": "0.03%"
+    },
+    "Badang": {
+        "role": "Fighter",
+        "specialty": "Charge/Burst",
+        "lane": "EXP Lane/Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Chou",
+            "Benedetta",
+            "Aldous",
+            "Edith",
+            "Argus"
+        ],
+        "win_rate": "50.25%",
+        "pick_rate": "1.27%",
+        "ban_rate": "3.33%"
+    },
+    "Balmond": {
+        "role": "Fighter",
+        "specialty": "Damage/Regen",
+        "lane": "Jungle/EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Dyrroth",
+            "Lunox",
+            "Moskov",
+            "Alpha",
+            "Freya"
+        ],
+        "win_rate": "39.34%",
+        "pick_rate": "0.11%",
+        "ban_rate": "0.13%"
+    },
+    "Bane": {
+        "role": "Fighter/Mage",
+        "specialty": "Push/Burst",
+        "lane": "Jungle/EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Chou",
+            "Valir",
+            "Martis",
+            "Alucard",
+            "Alpha"
+        ],
+        "win_rate": "52.14%",
+        "pick_rate": "0.25%",
+        "ban_rate": "0.07%"
+    },
+    "Barats": {
+        "role": "Tank/Fighter",
+        "specialty": "Damage/Crowd Control",
+        "lane": "Jungle",
+        "tier": "Pending Analysis",
+        "counters": [
+            "X.Borg",
+            "Karrie",
+            "Esmeralda",
+            "Valir",
+            "Angela"
+        ],
+        "win_rate": "48.61%",
+        "pick_rate": "0.13%",
+        "ban_rate": "0.07%"
+    },
+    "Baxia": {
+        "role": "Tank",
+        "specialty": "Support/Damage",
+        "lane": "Jungle/Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Gusion",
+            "Grock",
+            "Lesley",
+            "Harley",
+            "Kagura"
+        ],
+        "win_rate": "50.11%",
+        "pick_rate": "0.24%",
+        "ban_rate": "0.46%"
+    },
+    "Beatrix": {
+        "role": "Marksman",
+        "specialty": "Finisher/Damage",
+        "lane": "Gold Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Benedetta",
+            "Paquito",
+            "Gusion",
+            "Franco",
+            "Hayabusa"
+        ],
+        "win_rate": "49.80%",
+        "pick_rate": "0.67%",
+        "ban_rate": "0.13%"
+    },
+    "Belerick": {
+        "role": "Tank",
+        "specialty": "Crowd Control/Regen",
+        "lane": "Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Dyrroth",
+            "X.Borg",
+            "Karrie",
+            "Martis",
+            "Thamuz"
+        ],
+        "win_rate": "47.64%",
+        "pick_rate": "0.63%",
+        "ban_rate": "1.39%"
+    },
+    "Benedetta": {
+        "role": "Assassin/Fighter",
+        "specialty": "Chase/Burst",
+        "lane": "EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Guinevere",
+            "Khufra",
+            "Phoveus",
+            "Minsitthar",
+            "Kaja"
+        ],
+        "win_rate": "52.15%",
+        "pick_rate": "0.90%",
+        "ban_rate": "1.15%"
+    },
+    "Brody": {
+        "role": "Marksman",
+        "specialty": "Burst/Finisher",
+        "lane": "Gold Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Ling",
+            "Hayabusa",
+            "Karina",
+            "Saber",
+            "Eudora"
+        ],
+        "win_rate": "51.64%",
+        "pick_rate": "0.60%",
+        "ban_rate": "0.19%"
+    },
+    "Bruno": {
+        "role": "Marksman",
+        "specialty": "Finisher/Burst",
+        "lane": "Gold Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Moskov",
+            "Alpha",
+            "Freya",
+            "Karrie",
+            "Karina"
+        ],
+        "win_rate": "50.69%",
+        "pick_rate": "0.24%",
+        "ban_rate": "0.04%"
+    },
+    "Carmilla": {
+        "role": "Support/Tank",
+        "specialty": "Crowd Control/Damage",
+        "lane": "Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Harith",
+            "Zilong",
+            "Wanwan",
+            "Baxia",
+            "Sun"
+        ],
+        "win_rate": "49.84%",
+        "pick_rate": "0.66%",
+        "ban_rate": "0.63%"
+    },
+    "Cecilion": {
+        "role": "Mage",
+        "specialty": "Poke/Burst",
+        "lane": "Mid Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Lunox",
+            "Chou",
+            "Yin",
+            "Ling",
+            "X.Borg"
+        ],
+        "win_rate": "50.37%",
+        "pick_rate": "1.08%",
+        "ban_rate": "0.18%"
+    },
+    "Change": {
+        "role": "Mage",
+        "specialty": "Poke/Burst",
+        "lane": "Mid Lane",
+        "tier": "Pending Analysis",
+        "counters": [],
+        "win_rate": "47.96%",
+        "pick_rate": "0.57%",
+        "ban_rate": "0.15%"
+    },
+    "Chip": {
+        "role": "Support/Tank",
+        "specialty": "Support/Crowd Control",
+        "lane": "Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Baxia",
+            "Wanwan",
+            "Moskov",
+            "Lesley",
+            "Franco"
+        ],
+        "win_rate": "48.21%",
+        "pick_rate": "0.10%",
+        "ban_rate": "0.54%"
+    },
+    "Chou": {
+        "role": "Fighter",
+        "specialty": "Chase/Control",
+        "lane": "EXP Lane/Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Silvanna",
+            "Martis",
+            "Phoveus",
+            "Minsitthar",
+            "Dyrroth"
+        ],
+        "win_rate": "44.57%",
+        "pick_rate": "0.91%",
+        "ban_rate": "0.92%"
+    },
+    "Cici": {
+        "role": "Fighter",
+        "specialty": "Damage/Regen",
+        "lane": "EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Ling",
+            "Lancelot",
+            "Saber",
+            "Akai",
+            "Yve"
+        ],
+        "win_rate": "47.50%",
+        "pick_rate": "0.82%",
+        "ban_rate": "1.24%"
+    },
+    "Claude": {
+        "role": "Marksman",
+        "specialty": "Burst/Chase",
+        "lane": "Gold Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Popol",
+            "Hayabusa",
+            "Selena",
+            "Fanny",
+            "Natalia"
+        ],
+        "win_rate": "50.67%",
+        "pick_rate": "2.81%",
+        "ban_rate": "8.30%"
+    },
+    "Clint": {
+        "role": "Marksman",
+        "specialty": "Finisher/Burst",
+        "lane": "Gold Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Eudora",
+            "Akai",
+            "Karina",
+            "Fanny",
+            "Freya"
+        ],
+        "win_rate": "51.62%",
+        "pick_rate": "1.07%",
+        "ban_rate": "0.75%"
+    },
+    "Cyclops": {
+        "role": "Mage",
+        "specialty": "Poke/Control",
+        "lane": "Mid Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Ling",
+            "Alice",
+            "Lancelot",
+            "Natalia",
+            "Harley"
+        ],
+        "win_rate": "50.85%",
+        "pick_rate": "1.41%",
+        "ban_rate": "1.80%"
+    },
+    "Diggie": {
+        "role": "Support",
+        "specialty": "Guard/Poke",
+        "lane": "Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Aldous",
+            "Franco",
+            "Fredrinn",
+            "Chip",
+            "Esmeralda"
+        ],
+        "win_rate": "56.23%",
+        "pick_rate": "0.35%",
+        "ban_rate": "39.83%"
+    },
+    "Dyrroth": {
+        "role": "Fighter",
+        "specialty": "Charge/Burst",
+        "lane": "EXP Lane/Jungle",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Guinevere",
+            "Esmeralda",
+            "Phoveus",
+            "Chou",
+            "Minsitthar"
+        ],
+        "win_rate": "43.66%",
+        "pick_rate": "0.19%",
+        "ban_rate": "0.07%"
+    },
+    "Edith": {
+        "role": "Tank/Marksman",
+        "specialty": "Control/Burst",
+        "lane": "EXP Lane/Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Baxia",
+            "Thamuz",
+            "Beatrix",
+            "Minsitthar",
+            "Wanwan"
+        ],
+        "win_rate": "50.65%",
+        "pick_rate": "0.21%",
+        "ban_rate": "0.06%"
+    },
+    "Esmeralda": {
+        "role": "Tank/Mage",
+        "specialty": "Regen/Mixed Damage",
+        "lane": "EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Karrie",
+            "Thamuz",
+            "Dyrroth",
+            "Valir",
+            "Baxia"
+        ],
+        "win_rate": "43.85%",
+        "pick_rate": "0.99%",
+        "ban_rate": "1.44%"
+    },
+    "Estes": {
+        "role": "Support",
+        "specialty": "Regen/Guard",
+        "lane": "Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Freya",
+            "Luo Yi",
+            "Baxia",
+            "Fanny",
+            "Eudora"
+        ],
+        "win_rate": "54.04%",
+        "pick_rate": "0.47%",
+        "ban_rate": "8.15%"
+    },
+    "Eudora": {
+        "role": "Mage",
+        "specialty": "Control/Burst",
+        "lane": "Mid Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Kagura",
+            "Sun",
+            "Hayabusa",
+            "Karina",
+            "Franco"
+        ],
+        "win_rate": "48.30%",
+        "pick_rate": "0.64%",
+        "ban_rate": "2.38%"
+    },
+    "Fanny": {
+        "role": "Assassin",
+        "specialty": "Chase/Finisher",
+        "lane": "Jungle",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Phoveus",
+            "Chou",
+            "Eudora",
+            "Franco",
+            "Akai"
+        ],
+        "win_rate": "44.06%",
+        "pick_rate": "0.90%",
+        "ban_rate": "6.32%"
+    },
+    "Faramis": {
+        "role": "Support/Mage",
+        "specialty": "Guard/Charge",
+        "lane": "Mid Lane/Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "X.Borg",
+            "Lylia",
+            "Gusion",
+            "Wanwan",
+            "Pharsa"
+        ],
+        "win_rate": "52.18%",
+        "pick_rate": "0.28%",
+        "ban_rate": "0.75%"
+    },
+    "Floryn": {
+        "role": "Support",
+        "specialty": "Poke/Guard",
+        "lane": "Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Eudora",
+            "Kagura",
+            "Paquito",
+            "X.Borg",
+            "Natan"
+        ],
+        "win_rate": "53.20%",
+        "pick_rate": "1.18%",
+        "ban_rate": "20.58%"
+    },
+    "Franco": {
+        "role": "Tank",
+        "specialty": "Initiator/Control",
+        "lane": "Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Chou",
+            "Freya",
+            "Valir",
+            "Martis",
+            "Minsitthar"
+        ],
+        "win_rate": "47.20%",
+        "pick_rate": "1.59%",
+        "ban_rate": "10.71%"
+    },
+    "Fredrinn": {
+        "role": "Fighter/Tank",
+        "specialty": "Damage/Chase",
+        "lane": "Jungle",
+        "tier": "Pending Analysis",
+        "counters": [
+            "X.Borg",
+            "Karrie",
+            "Valir",
+            "Dyrroth",
+            "Thamuz"
+        ],
+        "win_rate": "53.75%",
+        "pick_rate": "1.24%",
+        "ban_rate": "60.06%"
+    },
+    "Freya": {
+        "role": "Fighter",
+        "specialty": "Chase/Damage",
+        "lane": "EXP Lane/Jungle",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Masha",
+            "Melissa",
+            "Esmeralda",
+            "Minsitthar",
+            "Phoveus"
+        ],
+        "win_rate": "54.87%",
+        "pick_rate": "1.40%",
+        "ban_rate": "62.37%"
+    },
+    "Gatotkaca": {
+        "role": "Tank/Fighter",
+        "specialty": "Crowd Control/Burst",
+        "lane": "Roaming/EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Eudora",
+            "Karrie",
+            "Dyrroth",
+            "X.Borg",
+            "Yin"
+        ],
+        "win_rate": "46.94%",
+        "pick_rate": "0.81%",
+        "ban_rate": "0.49%"
+    },
+    "Gloo": {
+        "role": "Tank",
+        "specialty": "Regen/Control",
+        "lane": "EXP Lane/Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "    Zhong",
+            "Lancelot",
+            "Faramis",
+            "Vexana",
+            "Wanwan"
+        ],
+        "win_rate": "52.50%",
+        "pick_rate": "0.62%",
+        "ban_rate": "92.57%"
+    },
+    "Gord": {
+        "role": "Mage",
+        "specialty": "Poke/Burst",
+        "lane": "Mid Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Dyrroth",
+            "Lolita",
+            "Yin",
+            "Gusion",
+            "Hayabusa"
+        ],
+        "win_rate": "51.51%",
+        "pick_rate": "0.32%",
+        "ban_rate": "0.06%"
+    },
+    "Granger": {
+        "role": "Marksman",
+        "specialty": "Burst/Finisher",
+        "lane": "Gold Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Helcurt",
+            "Selena",
+            "Guinevere",
+            "Gusion",
+            "Saber"
+        ],
+        "win_rate": "42.67%",
+        "pick_rate": "3.01%",
+        "ban_rate": "3.94%"
+    },
+    "Grock": {
+        "role": "Tank/Fighter",
+        "specialty": "Crowd Control/Initiator",
+        "lane": "Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Hylos",
+            "X.Borg",
+            "Harley",
+            "Karrie",
+            "Dyrroth"
+        ],
+        "win_rate": "49.21%",
+        "pick_rate": "1.18%",
+        "ban_rate": "15.04%"
+    },
+    "Guinevere": {
+        "role": "Fighter",
+        "specialty": "Burst/Magic Damage",
+        "lane": "EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Selena",
+            "Wanwan",
+            "Diggie",
+            "Valir",
+            "Fanny"
+        ],
+        "win_rate": "52.44%",
+        "pick_rate": "1.90%",
+        "ban_rate": "31.24%"
+    },
+    "Gusion": {
+        "role": "Assassin",
+        "specialty": "Burst/Magic Damage",
+        "lane": "Jungle/Mid Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Minsitthar",
+            "Lolita",
+            "Ling",
+            "Khufra",
+            "Sun"
+        ],
+        "win_rate": "50.76%",
+        "pick_rate": "1.58%",
+        "ban_rate": "9.42%"
+    },
+    "Hanabi": {
+        "role": "Marksman",
+        "specialty": "Finisher/Damage",
+        "lane": "Gold Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Natalia",
+            "Fanny",
+            "Hayabusa",
+            "Nolan",
+            "Karina"
+        ],
+        "win_rate": "52.72%",
+        "pick_rate": "1.05%",
+        "ban_rate": "0.88%"
+    },
+    "Hanzo": {
+        "role": "Assassin",
+        "specialty": "Burst/Poke",
+        "lane": "Jungle",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Ling",
+            "Natalia",
+            "Fanny",
+            "Aldous",
+            "Helcurt"
+        ],
+        "win_rate": "50.31%",
+        "pick_rate": "0.48%",
+        "ban_rate": "4.91%"
+    },
+    "Harith": {
+        "role": "Mage",
+        "specialty": "Chase/Damage",
+        "lane": "Gold Lane/Mid Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Minsitthar",
+            "Esmeralda",
+            "Kaja",
+            "Franco",
+            "Phoveus"
+        ],
+        "win_rate": "48.34%",
+        "pick_rate": "0.32%",
+        "ban_rate": "0.09%"
+    },
+    "Harley": {
+        "role": "Assassin/Mage",
+        "specialty": "Burst/Poke",
+        "lane": "Jungle/Mid Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Jawhead",
+            "Hayabusa",
+            "Saber",
+            "Eudora",
+            "Vale"
+        ],
+        "win_rate": "47.30%",
+        "pick_rate": "0.57%",
+        "ban_rate": "0.38%"
+    },
+    "Hayabusa": {
+        "role": "Assassin",
+        "specialty": "Chase/Burst",
+        "lane": "Jungle",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Saber",
+            "Minsitthar",
+            "Natalia",
+            "Kaja",
+            "Chou"
+        ],
+        "win_rate": "49.23%",
+        "pick_rate": "1.39%",
+        "ban_rate": "12.05%"
+    },
+    "Helcurt": {
+        "role": "Assassin",
+        "specialty": "Push/Burst",
+        "lane": "Jungle/Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Argus",
+            "Hayabusa",
+            "Karina",
+            "Minsitthar",
+            "Natalia"
+        ],
+        "win_rate": "51.07%",
+        "pick_rate": "0.74%",
+        "ban_rate": "54.03%"
+    },
+    "Hilda": {
+        "role": "Fighter/Tank",
+        "specialty": "Damage/Regen",
+        "lane": "Roaming/EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Karrie",
+            "Dyrroth",
+            "Valir",
+            "Thamuz",
+            "Baxia"
+        ],
+        "win_rate": "52.22%",
+        "pick_rate": "0.90%",
+        "ban_rate": "18.05%"
+    },
+    "Hylos": {
+        "role": "Tank",
+        "specialty": "Guard/Initiator",
+        "lane": "Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Karrie",
+            "Valir",
+            "Lesley",
+            "Kimmy",
+            "Baxia"
+        ],
+        "win_rate": "47.80%",
+        "pick_rate": "0.53%",
+        "ban_rate": "0.23%"
+    },
+    "Irithel": {
+        "role": "Marksman",
+        "specialty": "Finisher/Burst",
+        "lane": "Gold Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Natalia",
+            "Freya",
+            "Helcurt",
+            "Kagura",
+            "Hayabusa"
+        ],
+        "win_rate": "52.92%",
+        "pick_rate": "0.57%",
+        "ban_rate": "0.24%"
+    },
+    "Ixia": {
+        "role": "Marksman",
+        "specialty": "Finisher/Damage",
+        "lane": "Gold Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Lolita",
+            "Karrie",
+            "Moskov",
+            "Hanabi",
+            "Claude"
+        ],
+        "win_rate": "53.34%",
+        "pick_rate": "1.33%",
+        "ban_rate": "30.95%"
+    },
+    "Jawhead": {
+        "role": "Fighter",
+        "specialty": "Charge/Burst",
+        "lane": "Roaming/EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Kagura",
+            "Sun",
+            "Fanny",
+            "Martis",
+            "Valir"
+        ],
+        "win_rate": "48.07%",
+        "pick_rate": "0.26%",
+        "ban_rate": "0.08%"
+    },
+    "Johnson": {
+        "role": "Tank/Support",
+        "specialty": "Support/Crowd Control",
+        "lane": "Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Esmeralda",
+            "Zhask",
+            "Jawhead",
+            "Diggie",
+            "Grock"
+        ],
+        "win_rate": "48.81%",
+        "pick_rate": "0.49%",
+        "ban_rate": "0.82%"
+    },
+    "Joy": {
+        "role": "Assassin",
+        "specialty": "Chase/Damage",
+        "lane": "Jungle",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Minsitthar",
+            "Phoveus",
+            "Franco",
+            "Kaja",
+            "Barats"
+        ],
+        "win_rate": "50.19%",
+        "pick_rate": "0.69%",
+        "ban_rate": "2.94%"
+    },
+    "Julian": {
+        "role": "Assassin/Fighter",
+        "specialty": "Chase/Magic Damage",
+        "lane": "Jungle/EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Aamon",
+            "Helcurt",
+            "Paquito",
+            "Yu Zhong",
+            "Roger"
+        ],
+        "win_rate": "49.85%",
+        "pick_rate": "0.67%",
+        "ban_rate": "0.68%"
+    },
+    "Kadita": {
+        "role": "Mage/Assassin",
+        "specialty": "Burst/Charge",
+        "lane": "Mid Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Helcurt",
+            "Natalia",
+            "Minsitthar",
+            "Baxia",
+            "Kaja"
+        ],
+        "win_rate": "53.55%",
+        "pick_rate": "1.50%",
+        "ban_rate": "12.70%"
+    },
+    "Kagura": {
+        "role": "Mage",
+        "specialty": "Poke/Finisher",
+        "lane": "Mid Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Gusion",
+            "Zilong",
+            "Alucard",
+            "Akai",
+            "Hayabusa"
+        ],
+        "win_rate": "50.30%",
+        "pick_rate": "0.92%",
+        "ban_rate": "0.72%"
+    },
+    "Kaja": {
+        "role": "Support/Fighter",
+        "specialty": "Control/Charge",
+        "lane": "Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Helcurt",
+            "Grock",
+            "Akai",
+            "Martis",
+            "Gusion"
+        ],
+        "win_rate": "55.66%",
+        "pick_rate": "0.45%",
+        "ban_rate": "2.65%"
+    },
+    "Kalea": {
+        "role": "Support/Fighter",
+        "specialty": "Control/Regen",
+        "lane": "Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Minsitthar",
+            "Yin",
+            "Minotaur",
+            "Diggie",
+            "Alpha"
+        ],
+        "win_rate": "46.88%",
+        "pick_rate": "0.56%",
+        "ban_rate": "3.54%"
+    },
+    "Karina": {
+        "role": "Assassin",
+        "specialty": "Finisher/Magic Damage",
+        "lane": "Jungle",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Yin",
+            "Ruby",
+            "Akai",
+            "Natalia",
+            "Franco"
+        ],
+        "win_rate": "46.13%",
+        "pick_rate": "0.28%",
+        "ban_rate": "0.21%"
+    },
+    "Karrie": {
+        "role": "Marksman",
+        "specialty": "Finisher/Damage",
+        "lane": "Gold Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Hayabusa",
+            "Karina",
+            "Chou",
+            "Lolita",
+            "Natalia"
+        ],
+        "win_rate": "54.24%",
+        "pick_rate": "1.76%",
+        "ban_rate": "11.21%"
+    },
+    "Khaleed": {
+        "role": "Fighter",
+        "specialty": "Damage/Regen",
+        "lane": "Roaming/EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Atlas",
+            "Yu Zhong",
+            "Kimmy",
+            "Helcurt",
+            "Cecilion"
+        ],
+        "win_rate": "51.33%",
+        "pick_rate": "0.50%",
+        "ban_rate": "0.39%"
+    },
+    "Khufra": {
+        "role": "Tank",
+        "specialty": "Initiator/Crowd Control",
+        "lane": "Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Baxia",
+            "Minsitthar",
+            "Wanwan",
+            "Valir",
+            "Diggie"
+        ],
+        "win_rate": "52.95%",
+        "pick_rate": "0.47%",
+        "ban_rate": "1.44%"
+    },
+    "Kimmy": {
+        "role": "Marksman/Mage",
+        "specialty": "Damage/Magic Damage",
+        "lane": "Mid Lane/Gold Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Chou",
+            "Aldous",
+            "Hayabusa",
+            "Lancelot",
+            "Lolita"
+        ],
+        "win_rate": "48.76%",
+        "pick_rate": "1.03%",
+        "ban_rate": "0.38%"
+    },
+    "Lancelot": {
+        "role": "Assassin",
+        "specialty": "Chase/Burst",
+        "lane": "Jungle",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Alucard",
+            "Chou",
+            "Saber",
+            "Argus",
+            "Yin"
+        ],
+        "win_rate": "42.44%",
+        "pick_rate": "1.48%",
+        "ban_rate": "11.61%"
+    },
+    "Lapulapu": {
+        "role": "Fighter",
+        "specialty": "Chase/Burst",
+        "lane": "EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [],
+        "win_rate": "48.31%",
+        "pick_rate": "1.60%",
+        "ban_rate": "5.70%"
+    },
+    "Layla": {
+        "role": "Marksman",
+        "specialty": "Finisher/Damage",
+        "lane": "Gold Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Hayabusa",
+            "Saber",
+            "Alucard",
+            "Fanny",
+            "Natalia"
+        ],
+        "win_rate": "46.34%",
+        "pick_rate": "0.35%",
+        "ban_rate": "0.34%"
+    },
+    "Leomord": {
+        "role": "Fighter",
+        "specialty": "Chase/Burst",
+        "lane": "Jungle",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Jawhead",
+            "Chou",
+            "Alpha",
+            "Minsitthar",
+            "Melissa"
+        ],
+        "win_rate": "53.19%",
+        "pick_rate": "1.55%",
+        "ban_rate": "32.98%"
+    },
+    "Lesley": {
+        "role": "Marksman/Assassin",
+        "specialty": "Finisher/Burst",
+        "lane": "Gold Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Esmeralda",
+            "Harley",
+            "Helcurt",
+            "Natalia",
+            "Karina"
+        ],
+        "win_rate": "49.45%",
+        "pick_rate": "1.44%",
+        "ban_rate": "3.17%"
+    },
+    "Ling": {
+        "role": "Assassin",
+        "specialty": "Chase/Burst",
+        "lane": "Jungle",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Valir",
+            "Khufra",
+            "Akai",
+            "Chou",
+            "Gusion"
+        ],
+        "win_rate": "45.77%",
+        "pick_rate": "0.39%",
+        "ban_rate": "0.19%"
+    },
+    "Lolita": {
+        "role": "Support/Tank",
+        "specialty": "Guard/Crowd Control",
+        "lane": "Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Chou",
+            "Akai",
+            "Ruby",
+            "Franco",
+            "Edith"
+        ],
+        "win_rate": "55.98%",
+        "pick_rate": "0.16%",
+        "ban_rate": "0.66%"
+    },
+    "Lukas": {
+        "role": "Fighter",
+        "specialty": "Regen/Damage",
+        "lane": "EXP Lane/Jungle",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Dyrroth",
+            "Valir",
+            "Valentina",
+            "X.Borg",
+            "Thamuz"
+        ],
+        "win_rate": "50.02%",
+        "pick_rate": "0.67%",
+        "ban_rate": "2.07%"
+    },
+    "Lunox": {
+        "role": "Mage",
+        "specialty": "Burst/Damage",
+        "lane": "Mid Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Helcurt",
+            "Claude",
+            "Lancelot",
+            "Gusion",
+            "Leomord"
+        ],
+        "win_rate": "49.57%",
+        "pick_rate": "0.82%",
+        "ban_rate": "0.45%"
+    },
+    "Luoyi": {
+        "role": "Mage",
+        "specialty": "Support/Crowd Control",
+        "lane": "Mid Lane",
+        "tier": "Pending Analysis",
+        "counters": [],
+        "win_rate": "47.35%",
+        "pick_rate": "0.20%",
+        "ban_rate": "0.04%"
+    },
+    "Lylia": {
+        "role": "Mage",
+        "specialty": "Push/Damage",
+        "lane": "Mid Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Guinevere",
+            "X.Borg",
+            "Dyrroth",
+            "Franco",
+            "Kaja"
+        ],
+        "win_rate": "48.56%",
+        "pick_rate": "0.73%",
+        "ban_rate": "0.28%"
+    },
+    "Martis": {
+        "role": "Fighter",
+        "specialty": "Finisher/Charge",
+        "lane": "Jungle/EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Phoveus",
+            "Kaja",
+            "Franco",
+            "Minsitthar",
+            "Baxia"
+        ],
+        "win_rate": "47.24%",
+        "pick_rate": "0.45%",
+        "ban_rate": "0.20%"
+    },
+    "Masha": {
+        "role": "Fighter/Tank",
+        "specialty": "Push/Damage",
+        "lane": "EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Belerick",
+            "Thamuz",
+            "Sun",
+            "Lunox",
+            "Dyrroth"
+        ],
+        "win_rate": "57.14%",
+        "pick_rate": "0.20%",
+        "ban_rate": "0.81%"
+    },
+    "Mathilda": {
+        "role": "Support/Assassin",
+        "specialty": "Initiator/Guard",
+        "lane": "Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Baxia",
+            "Franco",
+            "Wanwan",
+            "Vale",
+            "Badang"
+        ],
+        "win_rate": "45.91%",
+        "pick_rate": "0.28%",
+        "ban_rate": "0.77%"
+    },
+    "Melissa": {
+        "role": "Marksman",
+        "specialty": "Finisher/Damage",
+        "lane": "Gold Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Franco",
+            "X.Borg",
+            "Martis",
+            "Yu Zhong",
+            "Hayabusa"
+        ],
+        "win_rate": "53.39%",
+        "pick_rate": "0.34%",
+        "ban_rate": "0.19%"
+    },
+    "Minotaur": {
+        "role": "Tank/Support",
+        "specialty": "Crowd Control",
+        "lane": "Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Freya",
+            "Moskov",
+            "Aurora",
+            "Nana",
+            "Alpha"
+        ],
+        "win_rate": "53.28%",
+        "pick_rate": "0.87%",
+        "ban_rate": "9.37%"
+    },
+    "Minsitthar": {
+        "role": "Fighter",
+        "specialty": "Initiator/Crowd Control",
+        "lane": "EXP Lane/Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Martis",
+            "Yin",
+            "Aulus",
+            "Akai",
+            "Zilong"
+        ],
+        "win_rate": "52.24%",
+        "pick_rate": "0.73%",
+        "ban_rate": "4.88%"
+    },
+    "Miya": {
+        "role": "Marksman",
+        "specialty": "Finisher/Damage",
+        "lane": "Gold Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Natalia",
+            "Karina",
+            "Hayabusa",
+            "Clint",
+            "Fanny"
+        ],
+        "win_rate": "52.42%",
+        "pick_rate": "0.82%",
+        "ban_rate": "0.63%"
+    },
+    "Moskov": {
+        "role": "Marksman",
+        "specialty": "Finisher/Chase",
+        "lane": "Gold Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Chou",
+            "Saber",
+            "Natalia",
+            "Badang",
+            "Ling"
+        ],
+        "win_rate": "52.98%",
+        "pick_rate": "0.72%",
+        "ban_rate": "0.10%"
+    },
+    "Nana": {
+        "role": "Mage",
+        "specialty": "Poke/Burst",
+        "lane": "Mid Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Silvanna",
+            "Chou",
+            "Lancelot",
+            "Hayabusa",
+            "Sun"
+        ],
+        "win_rate": "45.27%",
+        "pick_rate": "0.55%",
+        "ban_rate": "0.41%"
+    },
+    "Natalia": {
+        "role": "Assassin",
+        "specialty": "Chase/Finisher",
+        "lane": "Jungle/Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Saber",
+            "Jawhead",
+            "Hayabusa",
+            "Khufra",
+            "Rafaela"
+        ],
+        "win_rate": "51.26%",
+        "pick_rate": "0.25%",
+        "ban_rate": "1.14%"
+    },
+    "Natan": {
+        "role": "Marksman",
+        "specialty": "Burst/Magic Damage",
+        "lane": "Gold Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Hayabusa",
+            "Saber",
+            "Melissa",
+            "Lolita",
+            "Chou"
+        ],
+        "win_rate": "51.91%",
+        "pick_rate": "0.46%",
+        "ban_rate": "0.24%"
+    },
+    "Nolan": {
+        "role": "Assassin",
+        "specialty": "Chase/Burst",
+        "lane": "Jungle",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Phoveus",
+            "Khufra",
+            "Franco",
+            "Minsitthar",
+            "Gatotkaca"
+        ],
+        "win_rate": "50.62%",
+        "pick_rate": "0.51%",
+        "ban_rate": "0.28%"
+    },
+    "Novaria": {
+        "role": "Mage",
+        "specialty": "Burst/Poke",
+        "lane": "Mid Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Lolita",
+            "Yu zhong",
+            "Natalia",
+            "Ling",
+            "Fanny"
+        ],
+        "win_rate": "47.19%",
+        "pick_rate": "0.42%",
+        "ban_rate": "0.10%"
+    },
+    "Obsidia": {
+        "role": "Marksman",
+        "specialty": "Finisher/Damage",
+        "lane": "Gold Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Chou",
+            "Saber",
+            "Joy",
+            "Guinevere",
+            "Fanny"
+        ],
+        "win_rate": "50.98%",
+        "pick_rate": "0.67%",
+        "ban_rate": "2.17%"
+    },
+    "Odette": {
+        "role": "Mage",
+        "specialty": "Burst/Poke",
+        "lane": "Mid Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Guinevere",
+            "Chou",
+            "Kagura",
+            "Fanny",
+            "Franco"
+        ],
+        "win_rate": "52.09%",
+        "pick_rate": "0.57%",
+        "ban_rate": "0.17%"
+    },
+    "Paquito": {
+        "role": "Fighter/Assassin",
+        "specialty": "Chase/Damage",
+        "lane": "EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Argus",
+            "Phoveus",
+            "Khufra",
+            "Sun",
+            "Minsitthar"
+        ],
+        "win_rate": "47.21%",
+        "pick_rate": "0.37%",
+        "ban_rate": "0.14%"
+    },
+    "Pharsa": {
+        "role": "Mage",
+        "specialty": "Burst/Poke",
+        "lane": "Mid Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Franco",
+            "Fanny",
+            "Jawhead",
+            "Harley",
+            "Helcurt"
+        ],
+        "win_rate": "49.72%",
+        "pick_rate": "1.18%",
+        "ban_rate": "0.29%"
+    },
+    "Phoveus": {
+        "role": "Fighter",
+        "specialty": "Regen/Damage",
+        "lane": "EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Layla",
+            "Baxia",
+            "Yve",
+            "Esmeralda",
+            "Minsitthar"
+        ],
+        "win_rate": "50.16%",
+        "pick_rate": "0.53%",
+        "ban_rate": "0.84%"
+    },
+    "Rafaela": {
+        "role": "Support",
+        "specialty": "Regen/Guard",
+        "lane": "Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Karina",
+            "Saber",
+            "Hayabusa",
+            "Natalia",
+            "Moskov"
+        ],
+        "win_rate": "52.65%",
+        "pick_rate": "0.25%",
+        "ban_rate": "1.16%"
+    },
+    "Roger": {
+        "role": "Fighter/Marksman",
+        "specialty": "Finisher/Burst",
+        "lane": "Jungle",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Alucard",
+            "Aurora",
+            "Jawhead",
+            "Martis",
+            "Silvanna"
+        ],
+        "win_rate": "47.71%",
+        "pick_rate": "0.30%",
+        "ban_rate": "0.05%"
+    },
+    "Ruby": {
+        "role": "Fighter",
+        "specialty": "Crowd Control/Regen",
+        "lane": "EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "X.Borg",
+            "Yin",
+            "Phoveus",
+            "Valir",
+            "Baxia"
+        ],
+        "win_rate": "52.42%",
+        "pick_rate": "0.89%",
+        "ban_rate": "0.91%"
+    },
+    "Saber": {
+        "role": "Assassin",
+        "specialty": "Charge/Finisher",
+        "lane": "Jungle/Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Belerick",
+            "Argus",
+            "Diggie",
+            "Valir",
+            "Hanabi"
+        ],
+        "win_rate": "51.06%",
+        "pick_rate": "0.52%",
+        "ban_rate": "6.19%"
+    },
+    "Selena": {
+        "role": "Assassin/Mage",
+        "specialty": "Initiator/Finisher",
+        "lane": "Mid Lane/Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Wanwan",
+            "Saber",
+            "Benedetta",
+            "Diggie",
+            "Valir"
+        ],
+        "win_rate": "45.38%",
+        "pick_rate": "0.50%",
+        "ban_rate": "0.29%"
+    },
+    "Silvanna": {
+        "role": "Fighter",
+        "specialty": "Initiator/Magic Damage",
+        "lane": "EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Wanwan",
+            "X.Borg",
+            "Baxia",
+            "Franco",
+            "Chou"
+        ],
+        "win_rate": "51.48%",
+        "pick_rate": "0.54%",
+        "ban_rate": "0.34%"
+    },
+    "Sora": {
+        "role": "Fighter/Assassin",
+        "specialty": "Charge/Burst",
+        "lane": "EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Franco",
+            "Belerick",
+            "Kaja",
+            "Minotaur",
+            "Thamuz"
+        ],
+        "win_rate": "50.51%",
+        "pick_rate": "1.10%",
+        "ban_rate": "88.11%"
+    },
+    "Sun": {
+        "role": "Fighter",
+        "specialty": "Push/Damage",
+        "lane": "EXP Lane/Jungle",
+        "tier": "Pending Analysis",
+        "counters": [
+            "X.Borg",
+            "Ruby",
+            "Silvanna",
+            "Aulus",
+            "Valir"
+        ],
+        "win_rate": "51.86%",
+        "pick_rate": "1.24%",
+        "ban_rate": "5.63%"
+    },
+    "Suyou": {
+        "role": "Assassin/Fighter",
+        "specialty": "Chase/Burst",
+        "lane": "Jungle",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Thamuz",
+            "X.Borg",
+            "Yin",
+            "Kaja",
+            "Franco"
+        ],
+        "win_rate": "50.26%",
+        "pick_rate": "0.67%",
+        "ban_rate": "1.01%"
+    },
+    "Terizla": {
+        "role": "Fighter/Tank",
+        "specialty": "Burst/Crowd Control",
+        "lane": "EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Valir",
+            "Dyrroth",
+            "Lunox",
+            "Karrie",
+            "X.Borg"
+        ],
+        "win_rate": "49.67%",
+        "pick_rate": "0.38%",
+        "ban_rate": "0.06%"
+    },
+    "Thamuz": {
+        "role": "Fighter",
+        "specialty": "Chase/Damage",
+        "lane": "EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "X.Borg",
+            "Aldous",
+            "Valir",
+            "Baxia",
+            "Cici"
+        ],
+        "win_rate": "50.13%",
+        "pick_rate": "0.67%",
+        "ban_rate": "1.42%"
+    },
+    "Tigreal": {
+        "role": "Tank",
+        "specialty": "Crowd Control",
+        "lane": "Roaming",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Nana",
+            "Martis",
+            "Eudora",
+            "Valir",
+            "Baxia"
+        ],
+        "win_rate": "46.71%",
+        "pick_rate": "1.65%",
+        "ban_rate": "4.17%"
+    },
+    "Uranus": {
+        "role": "Tank",
+        "specialty": "Regen",
+        "lane": "EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Karrie",
+            "Odette",
+            "Dyrroth",
+            "Baxia",
+            "Valir"
+        ],
+        "win_rate": "51.31%",
+        "pick_rate": "0.63%",
+        "ban_rate": "0.54%"
+    },
+    "Vale": {
+        "role": "Mage",
+        "specialty": "Burst/Crowd Control",
+        "lane": "Mid Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Chou",
+            "Helcurt",
+            "Harley",
+            "Lancelot",
+            "Fanny"
+        ],
+        "win_rate": "48.47%",
+        "pick_rate": "0.22%",
+        "ban_rate": "0.03%"
+    },
+    "Valentina": {
+        "role": "Mage",
+        "specialty": "Burst/Finisher",
+        "lane": "Mid Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Wanwan",
+            "Alice",
+            "Sun",
+            "Gusion",
+            "Kagura"
+        ],
+        "win_rate": "43.30%",
+        "pick_rate": "0.41%",
+        "ban_rate": "0.70%"
+    },
+    "Valir": {
+        "role": "Mage",
+        "specialty": "Damage/Guard",
+        "lane": "Mid Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Lancelot",
+            "Kaja",
+            "Akai",
+            "Franco",
+            "Hayabusa"
+        ],
+        "win_rate": "50.18%",
+        "pick_rate": "0.52%",
+        "ban_rate": "0.33%"
+    },
+    "Vexana": {
+        "role": "Mage",
+        "specialty": "Poke/Control",
+        "lane": "Mid Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Lylia",
+            "Chou",
+            "Natalia",
+            "Kagura",
+            "Kadita"
+        ],
+        "win_rate": "50.00%",
+        "pick_rate": "1.18%",
+        "ban_rate": "0.35%"
+    },
+    "Wanwan": {
+        "role": "Marksman",
+        "specialty": "Finisher/Burst",
+        "lane": "Gold Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Natalia",
+            "Esmeralda",
+            "Lunox",
+            "Kaja",
+            "Lolita"
+        ],
+        "win_rate": "48.05%",
+        "pick_rate": "0.18%",
+        "ban_rate": "0.27%"
+    },
+    "X Borg": {
+        "role": "Fighter",
+        "specialty": "Regen/Burst",
+        "lane": "EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [],
+        "win_rate": "48.41%",
+        "pick_rate": "0.81%",
+        "ban_rate": "5.42%"
+    },
+    "Xavier": {
+        "role": "Mage",
+        "specialty": "Damage/Guard",
+        "lane": "Mid Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Helcurt",
+            "Fanny",
+            "Chou",
+            "Gusion",
+            "Lancelot"
+        ],
+        "win_rate": "50.26%",
+        "pick_rate": "1.11%",
+        "ban_rate": "0.18%"
+    },
+    "Yin": {
+        "role": "Fighter/Assassin",
+        "specialty": "Burst/Control",
+        "lane": "Jungle/EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Thamuz",
+            "Sun",
+            "Argus",
+            "Jawhead",
+            "Valir"
+        ],
+        "win_rate": "48.71%",
+        "pick_rate": "0.30%",
+        "ban_rate": "0.37%"
+    },
+    "Yisunshin": {
+        "role": "Assassin/Marksman",
+        "specialty": "Finisher/Chase",
+        "lane": "Jungle",
+        "tier": "Pending Analysis",
+        "counters": [],
+        "win_rate": "51.10%",
+        "pick_rate": "2.33%",
+        "ban_rate": "44.12%"
+    },
+    "Yuzhong": {
+        "role": "Fighter",
+        "specialty": "Regen/Damage",
+        "lane": "EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [],
+        "win_rate": "50.91%",
+        "pick_rate": "1.98%",
+        "ban_rate": "16.33%"
+    },
+    "Yve": {
+        "role": "Mage",
+        "specialty": "Burst/Poke",
+        "lane": "Mid Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Helcurt",
+            "Nana",
+            "Natalia",
+            "Franco",
+            "Kaja"
+        ],
+        "win_rate": "51.37%",
+        "pick_rate": "0.46%",
+        "ban_rate": "0.85%"
+    },
+    "Zetian": {
+        "role": "Mage",
+        "specialty": "Damage/Crowd Control",
+        "lane": "Mid Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Fanny",
+            "Saber",
+            "Nolan",
+            "Guinevere",
+            "Ling"
+        ],
+        "win_rate": "51.16%",
+        "pick_rate": "1.62%",
+        "ban_rate": "4.30%"
+    },
+    "Zhask": {
+        "role": "Mage",
+        "specialty": "Chase/Damage",
+        "lane": "Mid Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Saber",
+            "Natalia",
+            "Fanny",
+            "Hayabusa",
+            "Chou"
+        ],
+        "win_rate": "47.37%",
+        "pick_rate": "0.13%",
+        "ban_rate": "0.03%"
+    },
+    "Zhuxin": {
+        "role": "Mage",
+        "specialty": "Damage/Crowd Control",
+        "lane": "Mid Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Hayabusa",
+            "Lancelot",
+            "Martis",
+            "Natalia",
+            "Saber"
+        ],
+        "win_rate": "53.11%",
+        "pick_rate": "0.95%",
+        "ban_rate": "7.90%"
+    },
+    "Zilong": {
+        "role": "Fighter/Assassin",
+        "specialty": "Chase/Damage",
+        "lane": "EXP Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Helcurt",
+            "Gatotkaca",
+            "Freya",
+            "Belerick",
+            "Jawhead"
+        ],
+        "win_rate": "45.57%",
+        "pick_rate": "0.28%",
+        "ban_rate": "0.26%"
+    },
+    "Popol": {
+        "role": "Marksman",
+        "specialty": "Push/Burst",
+        "lane": "Jungle/Gold Lane",
+        "tier": "Pending Analysis",
+        "counters": [
+            "Nolan",
+            "Natalia",
+            "Gusion",
+            "Silvanna",
+            "Esmeralda"
+        ],
+        "win_rate": "51.82%",
+        "pick_rate": "0.18%",
+        "ban_rate": "0.06%"
+    }
+}
