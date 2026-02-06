@@ -1,23 +1,38 @@
-﻿# Python
+﻿# =========================
+# Python
+# =========================
 __pycache__/
-*.pyc
-*.pyo
+*.py[cod]
 *.pyd
 
-# Virtualenv
+# =========================
+# Virtual environments
+# =========================
 venv/
 .venv/
 
-# SQLite temp files
+# =========================
+# Environment / secrets
+# =========================
+.env
+
+# =========================
+# SQLite
+# =========================
+*.db
 *.db-shm
 *.db-wal
 
-# Editor / OS
+# =========================
+# Editor / OS junk
+# =========================
 .vscode/
 .idea/
 .DS_Store
 Thumbs.db
 
-# Big scraped web artifacts / archives
-official_rank_files/
+# =========================
+# Large scraped / generated data
+# =========================
 archive/
+official_rank_files/
