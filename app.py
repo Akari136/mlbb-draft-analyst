@@ -270,9 +270,14 @@ if page == "🎯 Draft Analysis":
 
     with col_left:
         st.subheader("1) Your Hero Pool")
-        role = st.selectbox("Lane Preset", options=list(DEFAULT_POOLS.keys()), index=0)
-        preset_pool = pick_default_pool(heroes, DEFAULT_POOLS.get(role, []))
-        pool = st.multiselect("Active Pool", options=heroes, default=preset_pool)
+        role = st.selectbox("Lane Preset (optional)", options=["Select manually..."] + list(DEFAULT_POOLS.keys()), index=0)
+        
+        # Only use preset if user selected a lane
+        if role != "Select manually...":
+            preset_pool = pick_default_pool(heroes, DEFAULT_POOLS.get(role, []))
+            pool = st.multiselect("Active Pool", options=heroes, default=preset_pool)
+        else:
+            pool = st.multiselect("Active Pool", options=heroes, default=[])
 
     with col_right:
         st.subheader("2) Enemy Team")
