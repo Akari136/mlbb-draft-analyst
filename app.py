@@ -5,8 +5,27 @@ import sqlite3
 import json
 from datetime import datetime
 from typing import List, Optional
+from collections import defaultdict, Counter
 import streamlit as st
 from draft_engine import DraftEngine
+
+# Phase 2: Visual enhancements
+try:
+    from visualizations import (
+        create_win_rate_chart_data,
+        create_hero_performance_data,
+        create_role_distribution_data,
+        create_enemy_encounter_data,
+        create_performance_heatmap_data,
+        render_hero_comparison_chart,
+        render_win_rate_trend,
+        render_role_distribution,
+        render_enemy_matchup_chart,
+        render_day_performance
+    )
+    VISUALIZATIONS_AVAILABLE = True
+except ImportError:
+    VISUALIZATIONS_AVAILABLE = False
 
 
 # -----------------------------
@@ -187,7 +206,7 @@ def delete_game(db_path: str, game_id: int):
 st.sidebar.title("📱 Navigation")
 page = st.sidebar.radio(
     "Choose a page:",
-    ["🎯 Draft Analysis", "📝 Log Game", "📊 Game History", "⚙️ Settings"]
+    ["🎯 Draft Analysis", "📝 Log Game", "📊 Game History", "🧠 Notes Insights", "⚙️ Settings"]
 )
 
 st.sidebar.divider()
@@ -280,9 +299,18 @@ if page == "🎯 Draft Analysis":
             pool = st.multiselect("Active Pool", options=heroes, default=[])
 
     with col_right:
-        st.subheader("2) Enemy Team")
+        st.subheader("2) Draft Context")
+        
+        st.caption("Enemy Team")
         enemies = st.multiselect("Enemy Picks", options=heroes, default=[])
-        avoid = st.multiselect("Banned/Teammate Locked", options=heroes, default=[])
+        
+        st.caption("Your Team")
+        teammates = st.multiselect("Teammate Picks", options=heroes, default=[],
+                                   help="Future: Will suggest heroes with synergy")
+        
+        st.caption("Unavailable")
+        banned = st.multiselect("Banned Heroes", options=heroes, default=[],
+                               help="Heroes banned in draft phase")
 
     st.divider()
 
@@ -296,6 +324,8 @@ if page == "🎯 Draft Analysis":
             st.warning("Please select at least one hero for your pool.")
             st.stop()
 
+        # Combine teammates and banned into unavailable list
+        avoid = list(set(teammates + banned))
         final_pool = [h for h in pool if h not in set(avoid)]
 
         engine = DraftEngine(db_path=db_path, meta_path=meta_path, weights=weights)
@@ -306,10 +336,12 @@ if page == "🎯 Draft Analysis":
             results = engine.recommend(
                 pool=final_pool,
                 enemies=enemies,
+                teammates=teammates,  # NEW: Pass teammates for future synergy
                 base_score=float(base_score),
                 top_n=int(top_n),
                 use_inverse=use_inverse,
                 use_personal=use_personal,
+                use_synergy=False,  # TODO: Enable when synergy is implemented
             )
 
             st.subheader("Analysis Results")
@@ -358,6 +390,7 @@ if page == "🎯 Draft Analysis":
                             st.write(f"**Counter bonus:** {r.counter_bonus:+.2f}")
                             st.write(f"**Meta bonus:** {r.meta_bonus:+.2f}")
                             st.write(f"**Personal bonus:** {r.personal_bonus:+.2f}")
+                            st.write(f"**Synergy bonus:** {r.synergy_bonus:+.2f} (coming soon)")
                             st.write(f"**Strong hits:** {', '.join(r.strong_hits) if r.strong_hits else 'None'}")
                             st.write(f"**Weak hits:** {', '.join(r.weak_hits) if r.weak_hits else 'None'}")
                         with col_b:
@@ -450,6 +483,7 @@ elif page == "📊 Game History":
     overall_stats = get_hero_stats(db_path)
     
     if overall_stats['total_games'] > 0:
+        # Summary metrics
         col1, col2, col3, col4 = st.columns(4)
         with col1:
             st.metric("Total Games", overall_stats['total_games'])
@@ -463,7 +497,77 @@ elif page == "📊 Game History":
         
         st.divider()
         
-        # Hero-specific stats
+        # PHASE 2: Visual Charts
+        if VISUALIZATIONS_AVAILABLE:
+            # Tab layout for different visualizations
+            tab1, tab2, tab3, tab4 = st.tabs([
+                "📊 Overview", "🎮 Hero Performance", "⚔️ Enemy Matchups", "📅 Trends"
+            ])
+            
+            with tab1:
+                st.subheader("Performance Overview")
+                
+                col_a, col_b = st.columns(2)
+                
+                with col_a:
+                    # Win rate trend
+                    chart_data = create_win_rate_chart_data(db_path, days=30)
+                    render_win_rate_trend(chart_data)
+                
+                with col_b:
+                    # Role distribution
+                    role_data = create_role_distribution_data(db_path)
+                    render_role_distribution(role_data)
+            
+            with tab2:
+                st.subheader("Hero Performance Comparison")
+                
+                min_games = st.slider("Minimum games to show", 1, 10, 3)
+                heroes_data = create_hero_performance_data(db_path, min_games=min_games)
+                
+                render_hero_comparison_chart(heroes_data)
+                
+                # Detailed hero stats table
+                with st.expander("📋 Detailed Hero Statistics"):
+                    for hero_data in heroes_data:
+                        with st.container(border=True):
+                            col1, col2, col3 = st.columns(3)
+                            with col1:
+                                st.write(f"**{hero_data['hero']}**")
+                                st.caption(f"{hero_data['total_games']} games")
+                            with col2:
+                                wr_color = "🟢" if hero_data['win_rate'] >= 50 else "🔴"
+                                st.write(f"{wr_color} {hero_data['win_rate']:.1f}% WR")
+                                st.caption(f"{hero_data['wins']}W - {hero_data['losses']}L")
+                            with col3:
+                                st.write(f"KDA: {hero_data['kda']:.2f}")
+                                st.caption(f"{hero_data['avg_kills']:.1f}/{hero_data['avg_deaths']:.1f}/{hero_data['avg_assists']:.1f}")
+            
+            with tab3:
+                st.subheader("Enemy Matchup Analysis")
+                
+                enemy_data = create_enemy_encounter_data(db_path, top_n=10)
+                render_enemy_matchup_chart(enemy_data)
+            
+            with tab4:
+                st.subheader("Performance Trends")
+                
+                # Day of week performance
+                heatmap_data = create_performance_heatmap_data(db_path)
+                render_day_performance(heatmap_data)
+                
+                # Longer trend
+                st.divider()
+                days_back = st.selectbox("Time period", [7, 14, 30, 60, 90], index=2)
+                trend_data = create_win_rate_chart_data(db_path, days=days_back)
+                render_win_rate_trend(trend_data)
+        
+        else:
+            st.warning("⚠️ Install visualizations.py for enhanced charts")
+        
+        st.divider()
+        
+        # Original hero-specific stats section
         st.subheader("Hero Statistics")
         
         # Get all heroes you've played
@@ -534,6 +638,289 @@ elif page == "📊 Game History":
                     st.rerun()
     else:
         st.info("📭 No games logged yet. Head to the 'Log Game' page to start tracking your performance!")
+
+
+# =============================
+# PAGE: NOTES INSIGHTS
+# =============================
+elif page == "🧠 Notes Insights":
+    st.title("🧠 Notes Insights")
+    st.caption("AI-powered analysis of your game notes to extract patterns and learnings")
+    
+    # Import the analyzers
+    try:
+        from notes_analyzer_free import FreeNotesAnalyzer
+        analyzer = FreeNotesAnalyzer(db_path)
+        
+        # Try to import Gemini analyzer
+        try:
+            from gemini_analyzer import GeminiNotesAnalyzer, get_gemini_api_key_instructions, GEMINI_AVAILABLE
+            gemini_enabled = GEMINI_AVAILABLE
+        except ImportError:
+            gemini_enabled = False
+        
+        notes = analyzer.get_all_notes()
+        
+        if not notes:
+            st.info("📭 No game notes found. Add notes to your logged games to see insights!")
+            st.markdown("""
+            **How to get started:**
+            1. Go to "Log Game" page
+            2. Fill in game details
+            3. **Add detailed notes** about what happened
+            4. Come back here to see patterns!
+            
+            **Good note examples:**
+            - "Traded too early without level 2 advantage"
+            - "Forgot about Kalea's ult pull range"
+            - "Good synergy with Khufra's setup"
+            - "Should have built defense earlier against their burst"
+            """)
+        else:
+            # Summary stats
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.metric("Games with Notes", len(notes))
+            with col2:
+                wins = sum(1 for n in notes if n['result'] == 'Win')
+                st.metric("Win Rate", f"{wins/len(notes)*100:.1f}%")
+            with col3:
+                heroes = len(set(n['your_hero'] for n in notes))
+                st.metric("Heroes Noted", heroes)
+            
+            st.divider()
+            
+            # Filter options
+            col_a, col_b = st.columns(2)
+            with col_a:
+                hero_filter = st.selectbox(
+                    "Filter by hero:",
+                    ["All Heroes"] + sorted(list(set(n['your_hero'] for n in notes)))
+                )
+            with col_b:
+                analysis_options = ["Smart Pattern Analysis", "Simple Stats Only"]
+                if gemini_enabled:
+                    analysis_options.insert(0, "🤖 AI Analysis (Gemini - FREE!)")
+                
+                analysis_type = st.selectbox(
+                    "Analysis type:",
+                    analysis_options
+                )
+            
+            # Filter notes
+            filtered_notes = notes if hero_filter == "All Heroes" else [
+                n for n in notes if n['your_hero'] == hero_filter
+            ]
+            
+            if st.button("🔍 Analyze Notes", type="primary", use_container_width=True):
+                with st.spinner("Analyzing your notes..."):
+                    if analysis_type == "🤖 AI Analysis (Gemini - FREE!)":
+                        # Gemini AI Analysis
+                        api_key = os.getenv('GEMINI_API_KEY')
+                        
+                        if not api_key:
+                            st.error("⚠️ Gemini API Key not found!")
+                            st.info(get_gemini_api_key_instructions())
+                            
+                            # Offer to enter key temporarily
+                            with st.expander("Enter API Key Temporarily"):
+                                temp_key = st.text_input("Gemini API Key", type="password")
+                                if temp_key and st.button("Analyze with this key"):
+                                    api_key = temp_key
+                        
+                        if api_key:
+                            try:
+                                gemini = GeminiNotesAnalyzer(api_key)
+                                result = gemini.analyze_notes(filtered_notes, focus="all")
+                                
+                                if result.get('success'):
+                                    st.success(f"✅ AI Analysis Complete! ({result['model']}) - {result['cost']}")
+                                    
+                                    insights = result['insights']
+                                    
+                                    # Top Recommendations
+                                    if insights.get('top_recommendations'):
+                                        st.subheader("🎯 AI-Generated Recommendations")
+                                        for rec in insights['top_recommendations']:
+                                            priority_icons = {
+                                                'HIGH': '🔴',
+                                                'MEDIUM': '🟡',
+                                                'LOW': '🟢'
+                                            }
+                                            icon = priority_icons.get(rec.get('priority', 'MEDIUM'), '🔵')
+                                            
+                                            with st.container(border=True):
+                                                st.markdown(f"### {icon} {rec.get('type', 'Recommendation')}")
+                                                st.write(f"**Hero:** {rec.get('hero', 'N/A')}")
+                                                st.write(f"**Recommendation:** {rec.get('recommendation', 'N/A')}")
+                                                if rec.get('impact'):
+                                                    st.caption(f"💡 Impact: {rec['impact']}")
+                                    
+                                    # Mistakes
+                                    if insights.get('mistakes'):
+                                        st.divider()
+                                        st.subheader("❌ AI-Detected Mistakes")
+                                        for mistake in insights['mistakes']:
+                                            with st.expander(f"{mistake.get('hero', 'Unknown')}: {mistake.get('pattern', 'Pattern')[:60]}..."):
+                                                st.write(f"**Pattern:** {mistake.get('pattern', 'N/A')}")
+                                                st.write(f"**Frequency:** {mistake.get('frequency', 0)} times")
+                                                st.write(f"**Severity:** {mistake.get('severity', 'medium').upper()}")
+                                                st.write(f"**Fix:** {mistake.get('recommendation', 'N/A')}")
+                                                if mistake.get('evidence'):
+                                                    st.write("**Evidence:**")
+                                                    for ev in mistake['evidence'][:2]:
+                                                        st.caption(f"> {ev}")
+                                    
+                                    # Learnings
+                                    if insights.get('learnings'):
+                                        st.divider()
+                                        st.subheader("💡 AI-Extracted Learnings")
+                                        for learning in insights['learnings']:
+                                            with st.expander(f"{learning.get('hero', 'Unknown')}: {learning.get('insight', 'Learning')[:60]}..."):
+                                                st.write(f"**Insight:** {learning.get('insight', 'N/A')}")
+                                                st.write(f"**Context:** {learning.get('context', 'N/A')}")
+                                                st.write(f"**Application:** {learning.get('application', 'N/A')}")
+                                    
+                                    # Matchups
+                                    if insights.get('matchups'):
+                                        st.divider()
+                                        st.subheader("⚔️ AI Matchup Analysis")
+                                        for matchup in insights['matchups']:
+                                            icon = "❌" if "struggling" in matchup.get('pattern', '').lower() else "✅"
+                                            with st.expander(f"{icon} {matchup.get('hero', 'Unknown')} vs {matchup.get('enemy', 'Unknown')}"):
+                                                st.write(f"**Pattern:** {matchup.get('pattern', 'N/A')}")
+                                                st.write(f"**Win Rate (from notes):** {matchup.get('win_rate_noted', 'Unknown')}")
+                                                st.write(f"**Tip:** {matchup.get('tip', 'N/A')}")
+                                
+                                else:
+                                    st.error(f"❌ AI Analysis Failed: {result.get('error', 'Unknown error')}")
+                                    st.warning("Falling back to pattern-based analysis...")
+                                    # Fall back to pattern analysis here
+                            
+                            except Exception as e:
+                                st.error(f"Error: {e}")
+                                st.info("💡 Try the 'Smart Pattern Analysis' option instead (works offline)")
+                    
+                    elif analysis_type == "Smart Pattern Analysis":
+                        # Free local AI-like analysis
+                        hero_param = None if hero_filter == "All Heroes" else hero_filter
+                        analysis = analyzer.generate_full_analysis(hero=hero_param)
+                        
+                        if 'error' in analysis:
+                            st.error(analysis['error'])
+                        else:
+                            st.success(f"✅ Found {analysis['summary']['insights_found']} insights from {analysis['summary']['total_notes']} notes!")
+                            
+                            # Top Recommendations
+                            if analysis['top_recommendations']:
+                                st.subheader("🎯 Top Recommendations")
+                                for rec in analysis['top_recommendations']:
+                                    priority_color = {
+                                        'HIGH': '🔴',
+                                        'MEDIUM': '🟡',
+                                        'LOW': '🟢'
+                                    }
+                                    
+                                    with st.container(border=True):
+                                        st.markdown(f"### {priority_color[rec['priority']]} {rec['type']}")
+                                        st.write(f"**Hero:** {rec['hero']}")
+                                        st.write(f"**Recommendation:** {rec['recommendation']}")
+                                        st.caption(f"Impact: {rec['impact']}")
+                            
+                            # Mistakes Section
+                            if analysis['mistakes']:
+                                st.divider()
+                                st.subheader("❌ Repeated Mistakes")
+                                for mistake in analysis['mistakes']:
+                                    with st.expander(f"{mistake['hero']}: {mistake['insight'][:50]}..."):
+                                        st.write(f"**Insight:** {mistake['insight']}")
+                                        st.write(f"**Frequency:** {mistake['frequency']} games")
+                                        st.write(f"**Confidence:** {int(mistake['confidence']*100)}%")
+                                        if mistake['evidence']:
+                                            st.write("**Evidence from your notes:**")
+                                            for ev in mistake['evidence'][:2]:
+                                                st.caption(f"> {ev}")
+                            
+                            # Matchup Section
+                            if analysis['matchups']:
+                                st.divider()
+                                st.subheader("⚔️ Matchup Insights")
+                                for matchup in analysis['matchups']:
+                                    icon = "❌" if "Struggles" in matchup['insight'] else "✅"
+                                    with st.expander(f"{icon} {matchup['hero']}: {matchup['insight'][:50]}..."):
+                                        st.write(f"**Insight:** {matchup['insight']}")
+                                        st.write(f"**Games noted:** {matchup['frequency']}")
+                                        st.write(f"**Confidence:** {int(matchup['confidence']*100)}%")
+                            
+                            # Learnings Section
+                            if analysis['learnings']:
+                                st.divider()
+                                st.subheader("💡 Key Learnings")
+                                for learning in analysis['learnings']:
+                                    with st.expander(f"{learning['hero']}: {learning['insight'][:50]}..."):
+                                        st.write(f"**Insight:** {learning['insight']}")
+                                        st.write(f"**Noted:** {learning['frequency']} times")
+                                        if learning['evidence']:
+                                            st.write("**Evidence:**")
+                                            for ev in learning['evidence'][:2]:
+                                                st.caption(f"> {ev}")
+                    
+                    else:
+                        # Simple stats only
+                        # Build simple stats
+                        hero_stats = defaultdict(lambda: {"wins": 0, "losses": 0, "total": 0})
+                        enemy_counts = Counter()
+                        
+                        for note in filtered_notes:
+                            hero = note['your_hero']
+                            hero_stats[hero]['total'] += 1
+                            if note['result'] == 'Win':
+                                hero_stats[hero]['wins'] += 1
+                            else:
+                                hero_stats[hero]['losses'] += 1
+                            
+                            for enemy in note['enemies']:
+                                enemy_counts[enemy] += 1
+                        
+                        st.subheader("📊 Simple Statistics")
+                        
+                        # Hero breakdown
+                        st.markdown("### Heroes with Notes")
+                        for hero, stats in sorted(hero_stats.items(), 
+                                                 key=lambda x: x[1]["total"], reverse=True):
+                            wr = (stats["wins"] / stats["total"] * 100) if stats["total"] > 0 else 0
+                            with st.container(border=True):
+                                col1, col2, col3 = st.columns([2, 1, 1])
+                                with col1:
+                                    st.write(f"**{hero}**")
+                                with col2:
+                                    st.write(f"{stats['total']} games")
+                                with col3:
+                                    color = "🟢" if wr >= 50 else "🔴"
+                                    st.write(f"{color} {wr:.1f}% WR")
+                        
+                        # Enemy patterns
+                        st.markdown("### Most Faced Enemies")
+                        for enemy, count in enemy_counts.most_common(10):
+                            st.write(f"- **{enemy}**: Mentioned in {count} games")
+            
+            st.divider()
+            
+            # Recent notes view
+            st.subheader("📝 Recent Notes")
+            display_count = st.slider("Show last N notes", 5, 50, 10)
+            
+            for note in filtered_notes[:display_count]:
+                enemies_str = ", ".join(note['enemies'][:3]) if note['enemies'] else "Unknown"
+                result_icon = "🟢" if note['result'] == "Win" else "🔴"
+                
+                with st.expander(f"{result_icon} {note['date']} - {note['your_hero']} vs {enemies_str}"):
+                    st.write(f"**Result:** {note['result']}")
+                    st.write(f"**Enemies:** {', '.join(note['enemies'])}")
+                    st.markdown(f"**Notes:**\n> {note['notes']}")
+    
+    except ImportError:
+        st.error("Notes analyzer module not found. Make sure notes_analyzer.py is in the same directory.")
 
 
 # =============================
