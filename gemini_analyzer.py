@@ -40,8 +40,8 @@ class GeminiNotesAnalyzer:
         # Configure Gemini
         genai.configure(api_key=self.api_key)
         
-        # Use Gemini 1.5 Flash (fastest, still free)
-        self.model = genai.GenerativeModel('gemini-1.5-flash')
+        # Use Gemini 1.5 Flash (correct model name for 2024)
+        self.model = genai.GenerativeModel('gemini-2.5-flash')
     
     def analyze_notes(self, notes: List[Dict], focus: str = "all") -> Dict:
         """

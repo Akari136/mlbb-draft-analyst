@@ -106,11 +106,13 @@ class PickResult:
     meta_bonus: float
     counter_bonus: float
     personal_bonus: float
+    synergy_bonus: float  # NEW: For future teammate synergy feature
     reasons: List[Reason]
     explain: str
     early_tip: str
     personal_stats: Optional[PersonalStats]
     matchup_warnings: List[str]  # List of enemy heroes you struggle against
+    synergy_hits: List[str]  # NEW: Teammates this hero synergizes with
 
 
 # -----------------------------
@@ -417,11 +419,13 @@ class DraftEngine:
         self,
         pool: List[str],
         enemies: List[str],
+        teammates: Optional[List[str]] = None,  # NEW: For future synergy feature
         base_score: float = 5.0,
         top_n: int = 10,
         max_reasons: int = 4,
         use_inverse: bool = True,
-        use_personal: bool = True,  # NEW: Toggle personal performance
+        use_personal: bool = True,  # Toggle personal performance
+        use_synergy: bool = False,  # NEW: Toggle synergy (not implemented yet)
     ) -> List[PickResult]:
         # Resolve inputs -> DB names
         db_enemies: List[str] = []
@@ -514,7 +518,7 @@ class DraftEngine:
             meta_bonus, meta_reasons = self._meta_bonus_and_reasons(hero)
             reasons.extend(meta_reasons)
 
-            # 4. Personal performance bonus (NEW)
+            # 4. Personal performance bonus
             personal_bonus = 0.0
             warnings: List[str] = []
             personal_stats = None
@@ -526,12 +530,20 @@ class DraftEngine:
                 )
                 reasons.extend(personal_reasons)
 
-            # 5. Get tips
+            # 5. Synergy bonus (placeholder for future implementation)
+            synergy_bonus = 0.0
+            synergy_hits: List[str] = []
+            # TODO: Implement synergy calculation
+            # if use_synergy and teammates:
+            #     synergy_bonus, synergy_reasons, synergy_hits = self._synergy_bonus_and_reasons(hero, teammates)
+            #     reasons.extend(synergy_reasons)
+
+            # 6. Get tips
             m_data = self.resolve_meta_entry(hero) or {}
             tip = m_data.get("early_tips") or m_data.get("early_tip") or "Tactical analysis pending."
 
-            # 6. Calculate final score
-            score = base_score + counter_bonus + meta_bonus + personal_bonus
+            # 7. Calculate final score
+            score = base_score + counter_bonus + meta_bonus + personal_bonus + synergy_bonus
             explain = render_explanation(reasons, max_reasons=max_reasons)
 
             results.append(
@@ -543,11 +555,13 @@ class DraftEngine:
                     meta_bonus=round(meta_bonus, 3),
                     counter_bonus=round(counter_bonus, 3),
                     personal_bonus=round(personal_bonus, 3),
+                    synergy_bonus=round(synergy_bonus, 3),
                     reasons=reasons,
                     explain=explain,
                     early_tip=tip,
                     personal_stats=personal_stats,
                     matchup_warnings=warnings,
+                    synergy_hits=synergy_hits,
                 )
             )
 

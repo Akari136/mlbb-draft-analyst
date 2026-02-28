@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+# Load environment variables
+from dotenv import load_dotenv
+load_dotenv()
+
 import os
 import sqlite3
 import json
@@ -8,6 +12,15 @@ from typing import List, Optional
 from collections import defaultdict, Counter
 import streamlit as st
 from draft_engine import DraftEngine
+
+# Session Tracker imports
+from session_tracker_ui import (
+    render_session_sidebar,
+    render_complete_session_modal,
+    add_pick_hero_button,
+    sync_session_with_draft_inputs
+)
+from session_tracker import SessionTracker
 
 # Phase 2: Visual enhancements
 try:
@@ -32,6 +45,12 @@ except ImportError:
 # Config
 # -----------------------------
 st.set_page_config(page_title="⚔️ MLBB Draft Analyst", page_icon="⚔️", layout="wide")
+
+# Initialize session state for session tracker
+if 'show_complete_modal' not in st.session_state:
+    st.session_state.show_complete_modal = False
+if 'active_session_id' not in st.session_state:
+    st.session_state.active_session_id = None
 
 DEFAULT_DB = "mlcounter.db"
 DEFAULT_META = "meta.json"
@@ -198,6 +217,135 @@ def delete_game(db_path: str, game_id: int):
     conn.commit()
     conn.close()
 
+def update_game(db_path: str, game_id: int, game_data: dict):
+    """Update a game record"""
+    conn = sqlite3.connect(db_path)
+    cur = conn.cursor()
+    
+    cur.execute("""
+        UPDATE game_history 
+        SET date = ?,
+            your_hero = ?,
+            your_role = ?,
+            teammates = ?,
+            enemies = ?,
+            result = ?,
+            mvp_status = ?,
+            kills = ?,
+            deaths = ?,
+            assists = ?,
+            notes = ?
+        WHERE game_id = ?
+    """, (
+        game_data['date'],
+        game_data['your_hero'],
+        game_data['your_role'],
+        json.dumps(game_data['teammates']),
+        json.dumps(game_data['enemies']),
+        game_data['result'],
+        game_data.get('mvp_status'),
+        game_data.get('kills'),
+        game_data.get('deaths'),
+        game_data.get('assists'),
+        game_data.get('notes', ''),
+        game_id
+    ))
+    
+    conn.commit()
+    conn.close()
+
+def render_edit_game_modal(db_path: str, game_id: int, heroes: list, roles: list):
+    """Render modal dialog to edit a game"""
+    # Get current game data
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    cur = conn.cursor()
+    
+    cur.execute("SELECT * FROM game_history WHERE game_id = ?", (game_id,))
+    row = cur.fetchone()
+    conn.close()
+    
+    if not row:
+        st.error("Game not found!")
+        del st.session_state.editing_game_id
+        return
+    
+    game = dict(row)
+    game['teammates'] = json.loads(game['teammates']) if game['teammates'] else []
+    game['enemies'] = json.loads(game['enemies']) if game['enemies'] else []
+    
+    # Modal overlay
+    st.markdown("---")
+    st.markdown(f"## ✏️ Edit Game #{game_id}")
+    st.caption(f"Originally logged: {game['created_at']}")
+    
+    with st.form("edit_game_form"):
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            game_date = st.date_input(
+                "Game Date", 
+                value=datetime.strptime(game['date'], '%Y-%m-%d') if game['date'] else datetime.now()
+            )
+            your_hero = st.selectbox("Your Hero", options=heroes, index=heroes.index(game['your_hero']) if game['your_hero'] in heroes else 0)
+            your_role = st.selectbox("Your Role", options=roles, index=roles.index(game['your_role']) if game['your_role'] in roles else 0)
+            result = st.selectbox("Result", options=["Win", "Loss"], index=0 if game['result'] == "Win" else 1)
+        
+        with col2:
+            mvp_status = st.selectbox(
+                "MVP Status", 
+                options=["None", "MVP", "Gold Medal", "Silver Medal"],
+                index=["None", "MVP", "Gold Medal", "Silver Medal"].index(game['mvp_status']) if game['mvp_status'] in ["MVP", "Gold Medal", "Silver Medal"] else 0
+            )
+            kills = st.number_input("Kills", min_value=0, value=game['kills'] if game['kills'] else 0, step=1)
+            deaths = st.number_input("Deaths", min_value=0, value=game['deaths'] if game['deaths'] else 0, step=1)
+            assists = st.number_input("Assists", min_value=0, value=game['assists'] if game['assists'] else 0, step=1)
+        
+        st.subheader("Team Composition")
+        teammates = st.multiselect("Teammates (4 heroes)", options=heroes, default=game['teammates'], max_selections=4)
+        enemies = st.multiselect("Enemy Team (5 heroes)", options=heroes, default=game['enemies'], max_selections=5)
+        
+        notes = st.text_area("Notes (optional)", value=game['notes'] if game['notes'] else "", placeholder="Any observations about the game...")
+        
+        col_save, col_cancel = st.columns(2)
+        
+        with col_save:
+            submitted = st.form_submit_button("💾 Save Changes", type="primary", use_container_width=True)
+        
+        with col_cancel:
+            cancelled = st.form_submit_button("❌ Cancel", use_container_width=True)
+        
+        if submitted:
+            if not enemies:
+                st.error("Please select at least one enemy hero")
+            else:
+                game_data = {
+                    'date': game_date.strftime('%Y-%m-%d'),
+                    'your_hero': your_hero,
+                    'your_role': your_role,
+                    'teammates': teammates,
+                    'enemies': enemies,
+                    'result': result,
+                    'mvp_status': mvp_status if mvp_status != "None" else None,
+                    'kills': kills,
+                    'deaths': deaths,
+                    'assists': assists,
+                    'notes': notes
+                }
+                
+                try:
+                    update_game(db_path, game_id, game_data)
+                    st.success(f"✅ Game #{game_id} updated successfully!")
+                    del st.session_state.editing_game_id
+                    st.balloons()
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"Error updating game: {e}")
+        
+        if cancelled:
+            del st.session_state.editing_game_id
+            st.rerun()
+
 
 # -----------------------------
 # Initialize
@@ -243,7 +391,18 @@ DEFAULT_POOLS = {
 # =============================
 if page == "🎯 Draft Analysis":
     st.title("⚔️ MLBB Draft Analyst")
-    st.caption("Counter DB + Meta Weighting + Dynamic Explanations + Pro Tips")
+    st.caption("Counter DB + Meta Weighting + Live Session Tracking")
+    
+    # NEW: Render live session sidebar
+    render_session_sidebar(db_path)
+    
+    # NEW: Check if completing session (modal)
+    tracker = SessionTracker(db_path)
+    if st.session_state.get('show_complete_modal') and st.session_state.get('active_session_id'):
+        session = tracker.get_session(st.session_state.active_session_id)
+        if session:
+            render_complete_session_modal(tracker, session, heroes)
+            st.stop()  # Don't render rest of page while modal is open
     
     # Settings in sidebar
     with st.sidebar:
@@ -289,12 +448,25 @@ if page == "🎯 Draft Analysis":
 
     with col_left:
         st.subheader("1) Your Hero Pool")
-        role = st.selectbox("Lane Preset (optional)", options=["Select manually..."] + list(DEFAULT_POOLS.keys()), index=0)
+        
+        # Use custom pools if available, otherwise defaults
+        available_pools = st.session_state.get('custom_pools', DEFAULT_POOLS)
+        
+        role = st.selectbox(
+            "Lane Preset (optional)", 
+            options=["Select manually..."] + list(available_pools.keys()), 
+            index=0,
+            help="Choose a lane to load your custom hero pool, or select manually"
+        )
         
         # Only use preset if user selected a lane
         if role != "Select manually...":
-            preset_pool = pick_default_pool(heroes, DEFAULT_POOLS.get(role, []))
+            preset_pool = pick_default_pool(heroes, available_pools.get(role, []))
             pool = st.multiselect("Active Pool", options=heroes, default=preset_pool)
+            
+            # Show pool info
+            if preset_pool:
+                st.caption(f"ℹ️ Loaded {len(preset_pool)} heroes from {role} preset")
         else:
             pool = st.multiselect("Active Pool", options=heroes, default=[])
 
@@ -302,15 +474,51 @@ if page == "🎯 Draft Analysis":
         st.subheader("2) Draft Context")
         
         st.caption("Enemy Team")
-        enemies = st.multiselect("Enemy Picks", options=heroes, default=[])
+        enemies = st.multiselect(
+            "Enemy Picks", 
+            options=heroes, 
+            default=[],
+            key="draft_enemies",
+            on_change=lambda: sync_session_with_draft_inputs(
+                db_path, 
+                st.session_state.get('draft_enemies', []),
+                st.session_state.get('draft_teammates', []),
+                st.session_state.get('draft_banned', [])
+            )
+        )
         
         st.caption("Your Team")
-        teammates = st.multiselect("Teammate Picks", options=heroes, default=[],
-                                   help="Future: Will suggest heroes with synergy")
+        teammates = st.multiselect(
+            "Teammate Picks", 
+            options=heroes, 
+            default=[],
+            key="draft_teammates",
+            help="Future: Will suggest heroes with synergy",
+            on_change=lambda: sync_session_with_draft_inputs(
+                db_path,
+                st.session_state.get('draft_enemies', []),
+                st.session_state.get('draft_teammates', []),
+                st.session_state.get('draft_banned', [])
+            )
+        )
         
         st.caption("Unavailable")
-        banned = st.multiselect("Banned Heroes", options=heroes, default=[],
-                               help="Heroes banned in draft phase")
+        banned = st.multiselect(
+            "Banned Heroes", 
+            options=heroes, 
+            default=[],
+            key="draft_banned",
+            help="Heroes banned in draft phase",
+            on_change=lambda: sync_session_with_draft_inputs(
+                db_path,
+                st.session_state.get('draft_enemies', []),
+                st.session_state.get('draft_teammates', []),
+                st.session_state.get('draft_banned', [])
+            )
+        )
+        
+        # REMOVED: The old sync call that happened after
+        # Now using on_change callbacks above for instant sync!
 
     st.divider()
 
@@ -336,16 +544,33 @@ if page == "🎯 Draft Analysis":
             results = engine.recommend(
                 pool=final_pool,
                 enemies=enemies,
-                teammates=teammates,  # NEW: Pass teammates for future synergy
+                teammates=teammates,
                 base_score=float(base_score),
                 top_n=int(top_n),
                 use_inverse=use_inverse,
                 use_personal=use_personal,
-                use_synergy=False,  # TODO: Enable when synergy is implemented
+                use_synergy=False,
             )
-
-            st.subheader("Analysis Results")
-            for i, r in enumerate(results, start=1):
+            
+            # IMPORTANT: Store results in session state so they persist!
+            st.session_state.draft_results = results
+            st.session_state.draft_role = role if role != "Select manually..." else "Unknown"
+            
+        except Exception as e:
+            st.error(f"Engine Error: {e}")
+            import traceback
+            st.code(traceback.format_exc())
+        finally:
+            engine.close()
+    
+    # Display results from session state (persists across reruns!)
+    if 'draft_results' in st.session_state and st.session_state.draft_results:
+        results = st.session_state.draft_results
+        your_role = st.session_state.get('draft_role', 'Unknown')
+        
+        st.subheader("Analysis Results")
+        
+        for i, r in enumerate(results, start=1):
                 with st.container(border=True):
                     c1, c2, c3 = st.columns([3, 1, 1])
                     with c1:
@@ -383,6 +608,11 @@ if page == "🎯 Draft Analysis":
                             )
                         else:
                             st.caption("No personal history")
+                        
+                        st.divider()
+                        
+                        # NEW: Add "I Pick This" button
+                        add_pick_hero_button(r.hero, role if role != "Select manually..." else "Unknown", db_path)
 
                     with st.expander("Technical Breakdown"):
                         col_a, col_b = st.columns(2)
@@ -398,23 +628,28 @@ if page == "🎯 Draft Analysis":
                                 st.write(f"**Personal Record:** {r.personal_stats.wins}W - {r.personal_stats.losses}L")
                                 st.write(f"**Confidence:** {r.personal_stats.confidence.title()}")
                                 
-                                # Show matchup details
-                                if enemies:
+                                # Show matchup details (if we have enemies in analysis)
+                                if 'draft_enemies' in st.session_state and st.session_state.draft_enemies:
                                     st.write("**Matchup History:**")
-                                    for enemy in enemies:
-                                        matchup = engine._get_matchup_stats(r.hero, enemy)
-                                        if matchup and matchup.total > 0:
-                                            emoji = "✅" if matchup.win_rate >= 50 else "❌"
-                                            st.caption(f"{emoji} vs {enemy}: {matchup.wins}-{matchup.losses}")
+                                    # Create temp engine to get matchup stats
+                                    temp_engine = DraftEngine(db_path=db_path, meta_path=meta_path, weights=weights)
+                                    try:
+                                        for enemy in st.session_state.draft_enemies:
+                                            matchup = temp_engine._get_matchup_stats(r.hero, enemy)
+                                            if matchup and matchup.total > 0:
+                                                emoji = "✅" if matchup.win_rate >= 50 else "❌"
+                                                st.caption(f"{emoji} vs {enemy}: {matchup.wins}-{matchup.losses}")
+                                    finally:
+                                        temp_engine.close()
                             else:
                                 st.caption("Play some games to build matchup history!")
-
-        except Exception as e:
-            st.error(f"Engine Error: {e}")
-            import traceback
-            st.code(traceback.format_exc())
-        finally:
-            engine.close()
+        
+        # Add clear results button at the end
+        st.divider()
+        if st.button("🗑️ Clear Results", use_container_width=True):
+            del st.session_state.draft_results
+            del st.session_state.draft_role
+            st.rerun()
 
 
 # =============================
@@ -632,10 +867,25 @@ elif page == "📊 Game History":
                 if game['notes']:
                     st.write(f"**Notes:** {game['notes']}")
                 
-                # Delete button
-                if st.button(f"🗑️ Delete Game #{game['game_id']}", key=f"del_{game['game_id']}"):
-                    delete_game(db_path, game['game_id'])
-                    st.rerun()
+                # Action buttons
+                col_a, col_b = st.columns(2)
+                
+                with col_a:
+                    # Edit button
+                    if st.button(f"✏️ Edit Game", key=f"edit_{game['game_id']}", use_container_width=True):
+                        st.session_state.editing_game_id = game['game_id']
+                        st.rerun()
+                
+                with col_b:
+                    # Delete button
+                    if st.button(f"🗑️ Delete", key=f"del_{game['game_id']}", use_container_width=True):
+                        delete_game(db_path, game['game_id'])
+                        st.success("Game deleted!")
+                        st.rerun()
+        
+        # Edit modal (appears when user clicks edit)
+        if 'editing_game_id' in st.session_state and st.session_state.editing_game_id:
+            render_edit_game_modal(db_path, st.session_state.editing_game_id, heroes, list(DEFAULT_POOLS.keys()))
     else:
         st.info("📭 No games logged yet. Head to the 'Log Game' page to start tracking your performance!")
 
@@ -795,7 +1045,6 @@ elif page == "🧠 Notes Insights":
                                 else:
                                     st.error(f"❌ AI Analysis Failed: {result.get('error', 'Unknown error')}")
                                     st.warning("Falling back to pattern-based analysis...")
-                                    # Fall back to pattern analysis here
                             
                             except Exception as e:
                                 st.error(f"Error: {e}")
@@ -920,7 +1169,7 @@ elif page == "🧠 Notes Insights":
                     st.markdown(f"**Notes:**\n> {note['notes']}")
     
     except ImportError:
-        st.error("Notes analyzer module not found. Make sure notes_analyzer.py is in the same directory.")
+        st.error("Notes analyzer module not found. Make sure notes_analyzer_free.py is in the same directory.")
 
 
 # =============================
@@ -929,26 +1178,126 @@ elif page == "🧠 Notes Insights":
 elif page == "⚙️ Settings":
     st.title("⚙️ Settings")
     
-    st.subheader("Database Management")
-    st.write(f"**Current Database:** `{db_path}`")
-    st.write(f"**Meta File:** `{meta_path}`")
+    # Tabs for different settings
+    tab1, tab2 = st.tabs(["📊 Database Management", "🎮 Hero Pool Presets"])
     
-    total_games = get_hero_stats(db_path)['total_games']
-    st.write(f"**Total Games Logged:** {total_games}")
+    with tab1:
+        st.subheader("Database Management")
+        st.write(f"**Current Database:** `{db_path}`")
+        st.write(f"**Meta File:** `{meta_path}`")
+        
+        total_games = get_hero_stats(db_path)['total_games']
+        st.write(f"**Total Games Logged:** {total_games}")
+        
+        st.divider()
+        
+        st.subheader("Danger Zone")
+        st.warning("⚠️ These actions cannot be undone!")
+        
+        if st.button("🗑️ Clear All Game History", type="secondary"):
+            confirm = st.checkbox("I understand this will delete all my game history")
+            if confirm:
+                if st.button("⚠️ Confirm Delete All", type="secondary"):
+                    conn = sqlite3.connect(db_path)
+                    cur = conn.cursor()
+                    cur.execute("DELETE FROM game_history")
+                    conn.commit()
+                    conn.close()
+                    st.success("All game history deleted")
+                    st.rerun()
     
-    st.divider()
-    
-    st.subheader("Danger Zone")
-    st.warning("⚠️ These actions cannot be undone!")
-    
-    if st.button("🗑️ Clear All Game History", type="secondary"):
-        confirm = st.checkbox("I understand this will delete all my game history")
-        if confirm:
-            if st.button("⚠️ Confirm Delete All", type="secondary"):
-                conn = sqlite3.connect(db_path)
-                cur = conn.cursor()
-                cur.execute("DELETE FROM game_history")
-                conn.commit()
-                conn.close()
-                st.success("All game history deleted")
+    with tab2:
+        st.subheader("🎮 Customize Hero Pool Presets")
+        st.caption("Edit the default hero pools for each lane. Changes are saved in session.")
+        
+        # Initialize custom pools in session state if not exists
+        if 'custom_pools' not in st.session_state:
+            st.session_state.custom_pools = DEFAULT_POOLS.copy()
+        
+        # Option to reset to defaults
+        col_reset1, col_reset2 = st.columns([3, 1])
+        with col_reset2:
+            if st.button("🔄 Reset to Defaults", use_container_width=True):
+                st.session_state.custom_pools = DEFAULT_POOLS.copy()
+                st.success("Reset to default pools!")
                 st.rerun()
+        
+        st.divider()
+        
+        # Editor for each lane
+        for lane, default_heroes in DEFAULT_POOLS.items():
+            with st.expander(f"**{lane}** ({len(st.session_state.custom_pools.get(lane, []))} heroes)", expanded=False):
+                st.write(f"**Current pool for {lane}:**")
+                
+                # Show current heroes as tags
+                current_pool = st.session_state.custom_pools.get(lane, [])
+                if current_pool:
+                    cols = st.columns(4)
+                    for i, hero in enumerate(current_pool):
+                        with cols[i % 4]:
+                            st.caption(f"• {hero}")
+                else:
+                    st.caption("_No heroes in this pool_")
+                
+                st.divider()
+                
+                # Edit pool
+                new_pool = st.multiselect(
+                    f"Heroes in {lane} pool:",
+                    options=heroes,
+                    default=current_pool,
+                    key=f"pool_editor_{lane}",
+                    help=f"Select heroes to include in the {lane} preset pool"
+                )
+                
+                # Save button
+                if st.button(f"💾 Save {lane} Pool", key=f"save_{lane}"):
+                    st.session_state.custom_pools[lane] = new_pool
+                    st.success(f"✅ Saved {lane} pool with {len(new_pool)} heroes!")
+        
+        st.divider()
+        
+        # Export/Import functionality
+        st.subheader("💾 Export/Import Pools")
+        
+        col_exp1, col_exp2 = st.columns(2)
+        
+        with col_exp1:
+            st.write("**Export Current Pools**")
+            if st.button("📥 Export to JSON", use_container_width=True):
+                import json
+                pools_json = json.dumps(st.session_state.custom_pools, indent=2)
+                st.download_button(
+                    label="⬇️ Download hero_pools.json",
+                    data=pools_json,
+                    file_name="hero_pools.json",
+                    mime="application/json",
+                    use_container_width=True
+                )
+        
+        with col_exp2:
+            st.write("**Import Pools from JSON**")
+            uploaded_file = st.file_uploader("Upload hero_pools.json", type=['json'])
+            if uploaded_file is not None:
+                try:
+                    import json
+                    imported_pools = json.load(uploaded_file)
+                    
+                    # Validate structure
+                    if isinstance(imported_pools, dict):
+                        st.session_state.custom_pools = imported_pools
+                        st.success("✅ Imported pools successfully!")
+                        st.rerun()
+                    else:
+                        st.error("❌ Invalid JSON structure")
+                except Exception as e:
+                    st.error(f"❌ Error importing: {e}")
+        
+        st.divider()
+        
+        # Preview
+        st.subheader("📋 Current Configuration")
+        for lane, pool in st.session_state.custom_pools.items():
+            st.write(f"**{lane}:** {len(pool)} heroes")
+            if pool:
+                st.caption(", ".join(pool[:10]) + (f" ...and {len(pool)-10} more" if len(pool) > 10 else ""))
